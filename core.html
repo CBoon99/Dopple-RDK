@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dopple RDK – Root Development Kernel</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #111;
+      color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      padding: 20px;
+      background: #1a1a1a;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+    header p {
+      font-size: 0.9rem;
+      color: #888;
+    }
+    .notice {
+      background: #222;
+      color: #ffcc00;
+      text-align: center;
+      padding: 10px;
+      font-size: 0.85rem;
+      border-bottom: 1px solid #333;
+    }
+    main {
+      flex: 1;
+      padding: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      transition: background 0.3s ease;
+      border: 1px solid #333;
+    }
+    .card:hover {
+      background: #2a2a2a;
+    }
+    .card a {
+      color: #00ffff;
+      text-decoration: none;
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    footer {
+      background: #1a1a1a;
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid #333;
+      font-size: 0.8rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dopple RDK</h1>
+    <p>Root Development Kernel for the Doppleit System</p>
+  </header>
+  <div class="notice">
+    Internal System – For Development and Operations Use Only – Not Indexed
+  </div>
+  <main>
+    <div class="card">
+      <h2>Doppleit: Vector</h2>
+      <a href="dopple-vector.html" target="_blank">Launch</a>
+    </div>
+    <div class="card">
+      <h2>Doppleit: Animate</h2>
+      <a href="dopple-animate.html" target="_blank">Launch</a>
+    </div>
+    <div class="card">
+      <h2>Doppleit: 3D</h2>
+      <a href="dopple-3d.html" target="_blank">Launch</a>
+    </div>
+    <div class="card">
+      <h2>Spiral Pulse (HTLW)</h2>
+      <a href="spiral.html" target="_blank">Enter</a>
+    </div>
+  </main>
+  <footer>
+    Dopple RDK v1.0 – © Carl. All rights reserved.
+  </footer>
+</body>
+</html>

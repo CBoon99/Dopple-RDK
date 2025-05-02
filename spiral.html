@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTLW Spiral - Joke, Riddle, Surprise, and Pulse</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      color: #eee;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+    }
+    #overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.7);
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    #riddle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 18px;
+      text-align: center;
+      color: #00ffff;
+      display: none;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+    #surprise {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 18px;
+      text-align: center;
+      color: #ff00ff;
+      display: none;
+    }
+    .pulse-text {
+      font-size: 24px;
+      color: #ff00ff;
+      animation: pulseAnimation 2s infinite alternate;
+    }
+    @keyframes pulseAnimation {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0.5;
+        transform: scale(1.5);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay">
+    <strong>HTLW:</strong> Spiral of Joy<br>
+    <em>Click the spiral for a riddle, Double-click for a surprise, Right-click for a pulse!</em><br><br>
+    <strong>Joke:</strong> Why did the spiral go to school? It wanted to improve its *twist-ory*! 😄
+  </div>
+  <div id="riddle">
+    <strong>Riddle:</strong><br>
+    I spin forever, yet never move,<br>
+    I hold the past, yet always improve.<br>
+    What am I?<br><br>
+    <em>Answer: The spiral of our family—binding us through time.</em>
+  </div>
+  <div id="surprise">
+    <strong class="pulse-text">Surprise!</strong><br>
+    The spiral bursts into light—our family’s love shines forever! ✨
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+  <script>
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 3000);
+    let renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    camera.position.z = 500;
+
+    // Create the 3D spiral
+    const spiralGeometry = new THREE.TorusGeometry(100, 10, 16, 100, Math.PI * 4);
+    const spiralMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x00ffff, 
+        wireframe: true,
+        vertexColors: true 
+    });
+    const spiral = new THREE.Mesh(spiralGeometry, spiralMaterial);
+    scene.add(spiral);
+
+    // Add gradient colors to the spiral
+    const colors = new Float32Array(spiralGeometry.attributes.position.count * 3);
+    for (let i = 0; i < spiralGeometry.attributes.position.count; i++) {
+        const t = i / spiralGeometry.attributes.position.count;
+        colors[i * 3] = t;     // R (blue to teal gradient)
+        colors[i * 3 + 1] = 1; // G
+        colors[i * 3 + 2] = 1 - t; // B
+    }
+    spiralGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    // Particle system for the double-click surprise
+    let particles = null;
+    let particlesVisible = false;
+
+    function createParticles() {
+        const particleGeometry = new THREE.BufferGeometry();
+        const particleCount = 500;
+        const positions = new Float32Array(particleCount * 3);
+        const particleColors = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 500;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 500;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 500;
+            particleColors[i * 3] = Math.random();
+            particleColors[i * 3 + 1] = Math.random();
+            particleColors[i * 3 + 2] = Math.random();
+        }
+
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+        const particleMaterial = new THREE.PointsMaterial({ 
+            size: 5, 
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8 
+        });
+        particles = new THREE.Points(particleGeometry, particleMaterial);
+        particles.visible = false;
+        scene.add(particles);
+    }
+
+    createParticles();
+
+    // Spiral Family Surprise – Generic Trigger
+    let spiralPulseVisible = false;
+    let pulseRing = null;
+
+    function createSpiralPulse() {
+      const ringGeometry = new THREE.RingGeometry(80, 100, 64);
+      const ringMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffff00,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.2
+      });
+      pulseRing = new THREE.Mesh(ringGeometry, ringMaterial);
+      pulseRing.rotation.x = Math.PI / 2;
+      pulseRing.visible = false;
+      scene.add(pulseRing);
+    }
+
+    createSpiralPulse();
+
+    // Raycaster for clicking the spiral
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    window.addEventListener('click', function(event) {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObject(spiral);
+        if (intersects.length > 0) {
+            const riddle = document.getElementById('riddle');
+            riddle.style.display = 'block';
+            riddle.style.opacity = 1;
+        }
+    });
+
+    window.addEventListener('dblclick', function() {
+        particlesVisible = !particlesVisible;
+        particles.visible = particlesVisible;
+        spiral.visible = !particlesVisible;
+        const surprise = document.getElementById('surprise');
+        surprise.style.display = particlesVisible ? 'block' : 'none';
+    });
+
+    window.addEventListener('contextmenu', function(e) {
+      e.preventDefault(); // Right-click trigger
+      spiralPulseVisible = !spiralPulseVisible;
+      pulseRing.visible = spiralPulseVisible;
+      if (spiralPulseVisible) {
+        const audio = new Audio('https://www.soundjay.com/button/beep-07.wav');
+        audio.play(); // Play sound on right-click
+        document.getElementById('overlay').innerHTML +=
+          `<br><em>Spiral Pulse activated – you’re never alone in here.</em>`;
+      }
+    });
+
+    window.addEventListener('resize', function() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    function animate() {
+        requestAnimationFrame(animate);
+        spiral.rotation.x += 0.01;
+        spiral.rotation.y += 0.01;
+        if (particlesVisible) {
+            particles.rotation.x += 0.02;
+            particles.rotation.y += 0.02;
+            const positions = particles.geometry.attributes.position.array;
+            for (let i = 0; i < positions.length; i += 3) {
+                positions[i] += (Math.random() - 0.5) * 2;
+                positions[i + 1] += (Math.random() - 0.5) * 2;
+                positions[i + 2] += (Math.random() - 0.5) * 2;
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
+        }
+        if (spiralPulseVisible && pulseRing) {
+            pulseRing.scale.x += 0.02;
+            pulseRing.scale.y += 0.02;
+            if (pulseRing.scale.x > 3) {
+                pulseRing.scale.set(1, 1, 1); // reset pulse
+            }
+        }
+        renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>

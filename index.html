@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dopple RDK – System Boot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background: black;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 3s ease-in forwards 4s;
+    }
+    .overlay h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .overlay button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .overlay button:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <video src="Men facing.mp4" autoplay muted playsinline></video>
+  <audio id="glitch-sound" src="https://www.soundjay.com/button/beep-10.mp3" preload="auto"></audio>
+  <div class="overlay">
+    <h1>Enter Core</h1>
+    <button onclick="window.location.href='index.html'">The Loop Core</button>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      const sound = document.getElementById('glitch-sound');
+      sound.play().catch(() => {
+        console.warn('Audio playback prevented by browser. Interaction required.');
+      });
+    });
+  </script>
+</body>
+</html>
