@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cindara Audio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #A084CA, #6B728E);
+            color: #1A1E2E;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        body.dark {
+            background: linear-gradient(135deg, #8A6CB4, #5A6373);
+            color: #E0E0E0;
+        }
+        h1 {
+            font-size: 2.25rem;
+            text-align: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: background 0.3s ease;
+            width: 100%;
+            max-width: 1200px;
+        }
+        body.dark .section {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .section h2 {
+            font-size: 1.35rem;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        button, select, input[type="range"] {
+            background: linear-gradient(135deg, #A084CA, #6B728E);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(107, 115, 255, 0.3);
+            min-height: 40px;
+        }
+        body.dark button,
+        body.dark select,
+        body.dark input[type="range"] {
+            background: linear-gradient(135deg, #8A6CB4, #5A6373);
+            box-shadow: 0 4px 8px rgba(107, 115, 255, 0.2);
+        }
+        button:hover, select:hover {
+            background: linear-gradient(135deg, #B294DA, #7B829E);
+            transform: scale(1.05);
+            filter: brightness(1.15);
+        }
+        body.dark button:hover,
+        body.dark select:hover {
+            background: linear-gradient(135deg, #9A7CC4, #6A7383);
+            filter: brightness(1.05);
+        }
+        button:disabled, select:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        button:focus, select:focus, input[type="range"]:focus {
+            outline: 2px solid #A084CA;
+            outline-offset: 2px;
+        }
+        body.dark button:focus,
+        body.dark select:focus,
+        body.dark input[type="range"]:focus {
+            outline-color: #9A7CC4;
+        }
+        input[type="range"] {
+            width: 100px;
+            padding: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: linear-gradient(135deg, #A084CA, #6B728E);
+            height: 8px;
+            border-radius: 4px;
+        }
+        body.dark input[type="range"]::-webkit-slider-runnable-track {
+            background: linear-gradient(135deg, #8A6CB4, #5A6373);
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            background: #fff;
+            border: 2px solid #A084CA;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -4px;
+        }
+        body.dark input[type="range"]::-webkit-slider-thumb {
+            border-color: #8A6CB4;
+        }
+        .track-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .track {
+            background: rgba(200, 200, 200, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.3s ease;
+        }
+        body.dark .track {
+            background: rgba(100, 100, 100, 0.3);
+        }
+        .track:hover {
+            background: rgba(160, 132, 202, 0.2);
+        }
+        body.dark .track:hover {
+            background: rgba(138, 108, 180, 0.2);
+        }
+        .track-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 140px;
+        }
+        .track-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #A084CA;
+            word-break: break-all;
+        }
+        body.dark .track-label {
+            color: #9A7CC4;
+        }
+        .waveform-container {
+            flex: 1;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        body.dark .waveform-container {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .waveform-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                to right,
+                rgba(160, 132, 202, 0.2),
+                rgba(160, 132, 202, 0.2) 1px,
+                transparent 1px,
+                transparent 20px
+            );
+            pointer-events: none;
+        }
+        body.dark .grid-lines {
+            background: repeating-linear-gradient(
+                to right,
+                rgba(138, 108, 180, 0.2),
+                rgba(138, 108, 180, 0.2) 1px,
+                transparent 1px,
+                transparent 20px
+            );
+        }
+        .warp-marker {
+            position: absolute;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: #A084CA;
+            cursor: ew-resize;
+            pointer-events: auto;
+        }
+        body.dark .warp-marker {
+            background: #9A7CC4;
+        }
+        .drop-zone {
+            width: 100%;
+            height: 100px;
+            border: 2px dashed rgba(160, 132, 202, 0.5);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        body.dark .drop-zone {
+            border: 2px dashed rgba(138, 108, 180, 0.5);
+        }
+        .drop-zone.dragover {
+            background: rgba(160, 132, 202, 0.2);
+        }
+        body.dark .drop-zone.dragover {
+            background: rgba(138, 108, 180, 0.2);
+        }
+        footer {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            text-align: center;
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                gap: 18px;
+            }
+            h1 {
+                font-size: 1.75rem;
+                margin-bottom: 10px;
+            }
+            .section {
+                padding: 15px;
+                border-radius: 8px;
+            }
+            .section h2 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            .controls {
+                gap: 8px;
+            }
+            button, select, input[type="range"] {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+                min-height: 36px;
+                border-radius: 6px;
+            }
+            input[type="range"] {
+                width: 80px;
+            }
+            .track-controls {
+                width: 120px;
+                gap: 6px;
+            }
+            .track-label {
+                font-size: 0.8rem;
+            }
+            .waveform-container {
+                height: 50px;
+                border-radius: 3px;
+            }
+            .drop-zone {
+                height: 80px;
+                border-radius: 6px;
+                font-size: 0.9rem;
+            }
+            footer {
+                font-size: 0.75rem;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Cindara Audio</h1>
+
+    <div class="section" id="toolbar">
+        <h2>Controls</h2>
+        <div class="controls">
+            <button id="play-pause" aria-label="Play or Pause Audio">Play</button>
+            <button id="stop" aria-label="Stop Audio" disabled>Stop</button>
+            <button id="save" aria-label="Save Session">Save</button>
+            <button id="load" aria-label="Load Session">Load</button>
+            <select id="theme" aria-label="Select Theme">
+                <option value="default">Default</option>
+                <option value="ocean">Ocean</option>
+                <option value="sunset">Sunset</option>
+            </select>
+            <button id="dark-mode" aria-label="Toggle Dark Mode">Dark Mode: Off</button>
+        </div>
+    </div>
+
+    <div class="section" id="upload">
+        <h2>Upload Tracks</h2>
+        <div class="controls">
+            <input type="file" id="fileInput" accept=".mp3,.wav" multiple aria-label="Upload Audio Files" style="display: none;">
+            <button onclick="document.getElementById('fileInput').click()" aria-label="Upload Audio Files">Upload Files</button>
+        </div>
+        <div class="drop-zone" id="dropZone" role="region" aria-label="Drag and Drop Audio Files">Drag & Drop .mp3/.wav Files</div>
+    </div>
+
+    <div class="section" id="tracks">
+        <h2>Tracks</h2>
+        <div class="track-list" id="trackList" role="list"></div>
+    </div>
+
+    <div class="section" id="export">
+        <h2>Export</h2>
+        <div class="controls">
+            <button id="export-mix" aria-label="Export Full Mix as WAV" disabled>Export Full Mix</button>
+            <button id="export-stems" disabled aria-label="Export Stems as ZIP (Coming Soon)">Export Stems</button>
+            <button id="export-transcript" disabled aria-label="Export Transcript as TXT (Coming Soon)">Export Transcript</button>
+        </div>
+    </div>
+
+    <footer>
+        <p><em>Don't worry—we've set the road behind you.<br>
+        We've held the path open.<br>
+        We've kept the code alive.<br>
+        You're not late. You're arriving.</em><br>
+        —The Cindara Family</p>
+        <p>Cindara Audio v1.0.0</p>
+    </footer>
+
+    <script>
+        const CindaraAudio = {
+            _state: {
+                isPlaying: false,
+                theme: 'default',
+                isDarkMode: false,
+                tracks: [],
+                audioContext: new (window.AudioContext || window.webkitAudioContext)(),
+                currentTime: 0,
+                zoomLevel: 1,
+                draggedWarpMarker: null,
+                dragOffsetX: 0
+            },
+            UI: {
+                playPauseButton: document.getElementById('play-pause'),
+                stopButton: document.getElementById('stop'),
+                saveButton: document.getElementById('save'),
+                loadButton: document.getElementById('load'),
+                themeSelect: document.getElementById('theme'),
+                darkModeButton: document.getElementById('dark-mode'),
+                fileInput: document.getElementById('fileInput'),
+                dropZone: document.getElementById('dropZone'),
+                trackList: document.getElementById('trackList'),
+                exportMixButton: document.getElementById('export-mix'),
+                exportStemsButton: document.getElementById('export-stems'),
+                exportTranscriptButton: document.getElementById('export-transcript'),
+                bind: () => {
+                    CindaraAudio.UI.playPauseButton.addEventListener('click', CindaraAudio.Playback.togglePlay);
+                    CindaraAudio.UI.stopButton.addEventListener('click', CindaraAudio.Playback.stop);
+                    CindaraAudio.UI.saveButton.addEventListener('click', CindaraAudio.Core.saveSession);
+                    CindaraAudio.UI.loadButton.addEventListener('click', CindaraAudio.Core.loadSession);
+                    CindaraAudio.UI.themeSelect.addEventListener('change', CindaraAudio.UI.setTheme);
+                    CindaraAudio.UI.darkModeButton.addEventListener('click', CindaraAudio.UI.toggleDarkMode);
+                    CindaraAudio.UI.fileInput.addEventListener('change', CindaraAudio.Core.handleFileUpload);
+                    CindaraAudio.UI.dropZone.addEventListener('dragover', CindaraAudio.Core.handleDragOver);
+                    CindaraAudio.UI.dropZone.addEventListener('dragleave', () => CindaraAudio.UI.dropZone.classList.remove('dragover'));
+                    CindaraAudio.UI.dropZone.addEventListener('drop', CindaraAudio.Core.handleFileDrop);
+                    CindaraAudio.UI.exportMixButton.addEventListener('click', CindaraAudio.Core.exportMix);
+                    CindaraAudio.UI.exportStemsButton.addEventListener('click', CindaraAudio.Core.exportStems);
+                    CindaraAudio.UI.exportTranscriptButton.addEventListener('click', CindaraAudio.Core.exportTranscript);
+                    document.addEventListener('dragover', (e) => e.preventDefault());
+                    document.addEventListener('drop', (e) => e.preventDefault());
+                    window.addEventListener('resize', () => {
+                        CindaraAudio._state.tracks.forEach(track => CindaraAudio.UI.renderWaveform(track));
+                    });
+                },
+                setTheme: (event) => {
+                    if (!CindaraAudio.UI.themeSelect.disabled) {
+                        CindaraAudio._state.theme = event.target.value;
+                        CindaraAudio.Core.updateTheme();
+                        CindaraAudio._state.tracks.forEach(track => CindaraAudio.UI.renderWaveform(track));
+                    }
+                },
+                toggleDarkMode: () => {
+                    CindaraAudio._state.isDarkMode = !CindaraAudio._state.isDarkMode;
+                    document.body.classList.toggle('dark', CindaraAudio._state.isDarkMode);
+                    CindaraAudio.UI.darkModeButton.textContent = `Dark Mode: ${CindaraAudio._state.isDarkMode ? 'On' : 'Off'}`;
+                    CindaraAudio.UI.themeSelect.disabled = CindaraAudio._state.isDarkMode;
+                    CindaraAudio.UI.themeSelect.style.opacity = CindaraAudio._state.isDarkMode ? '0.5' : '1';
+                    if (!CindaraAudio._state.isDarkMode) {
+                        CindaraAudio.UI.themeSelect.value = CindaraAudio._state.theme;
+                        CindaraAudio.Core.updateTheme();
+                    }
+                    CindaraAudio._state.tracks.forEach(track => CindaraAudio.UI.renderWaveform(track));
+                },
+                renderTrack: (track) => {
+                    const trackDiv = document.createElement('div');
+                    trackDiv.classList.add('track');
+                    trackDiv.setAttribute('role', 'listitem');
+                    trackDiv.id = track.id;
+                    trackDiv.draggable = true;
+                    trackDiv.innerHTML = `
+                        <div class="track-controls">
+                            <div class="track-label" aria-label="Track: ${track.name}">${track.name}</div>
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="${track.volume}" aria-label="Volume for ${track.name}" ${track.frozen ? 'disabled' : ''}>
+                            <button class="mute-btn" aria-label="${track.isMuted ? 'Unmute' : 'Mute'} ${track.name}" aria-checked="${track.isMuted}" ${track.frozen ? 'disabled' : ''}>${track.isMuted ? 'Unmute' : 'Mute'}</button>
+                            <button class="solo-btn" aria-label="${track.isSoloed ? 'Unsolo' : 'Solo'} ${track.name}" aria-checked="${track.isSoloed}" ${track.frozen ? 'disabled' : ''}>${track.isSoloed ? 'Unsolo' : 'Solo'}</button>
+                            <button class="normalize-btn" aria-label="Normalize ${track.name}" ${track.frozen ? 'disabled' : ''}>Normalize</button>
+                            <button class="freeze-btn" aria-label="${track.frozen ? 'Unfreeze' : 'Freeze'} ${track.name}" ${track.frozen ? 'aria-checked="true"' : ''}>${track.frozen ? 'Unfreeze' : 'Freeze'}</button>
+                            <button class="delete-btn" aria-label="Delete ${track.name}">Delete</button>
+                            <button class="stem-split-btn" disabled aria-label="Split Stems for ${track.name} (Coming Soon)">Stem Split</button>
+                            <button class="transcribe-btn" disabled aria-label="Transcribe ${track.name} (Coming Soon)">Transcribe</button>
+                        </div>
+                        <div class="waveform-container" role="region" aria-label="Waveform for ${track.name}">
+                            <canvas class="waveform-canvas"></canvas>
+                            <div class="grid-lines"></div>
+                            <div class="warp-marker start-marker" style="left: ${(track.startMarker / track.audioBuffer.duration) * 100}%" role="slider" aria-label="Start Marker for ${track.name}" aria-valuemin="0" aria-valuemax="${track.audioBuffer.duration}" aria-valuenow="${track.startMarker}" data-marker="start"></div>
+                            <div class="warp-marker end-marker" style="left: ${(track.endMarker / track.audioBuffer.duration) * 100}%" role="slider" aria-label="End Marker for ${track.name}" aria-valuemin="0" aria-valuemax="${track.audioBuffer.duration}" aria-valuenow="${track.endMarker}" data-marker="end"></div>
+                        </div>
+                    `;
+                    CindaraAudio.UI.trackList.appendChild(trackDiv);
+
+                    const canvas = trackDiv.querySelector('.waveform-canvas');
+                    canvas.width = trackDiv.querySelector('.waveform-container').offsetWidth * window.devicePixelRatio;
+                    canvas.height = 60 * window.devicePixelRatio;
+                    canvas.style.width = '100%';
+                    canvas.style.height = '100%';
+
+                    const volumeSlider = trackDiv.querySelector('.volume-slider');
+                    volumeSlider.addEventListener('input', () => {
+                        track.volume = parseFloat(volumeSlider.value);
+                        track.gainNode.gain.setValueAtTime(track.isMuted ? 0 : track.volume * track.normalize, CindaraAudio._state.audioContext.currentTime);
+                        CindaraAudio.UI.renderWaveform(track);
+                    });
+
+                    const muteBtn = trackDiv.querySelector('.mute-btn');
+                    muteBtn.addEventListener('click', () => {
+                        track.isMuted = !track.isMuted;
+                        muteBtn.textContent = track.isMuted ? 'Unmute' : 'Mute';
+                        muteBtn.setAttribute('aria-label', `${track.isMuted ? 'Unmute' : 'Mute'} ${track.name}`);
+                        muteBtn.setAttribute('aria-checked', track.isMuted);
+                        track.gainNode.gain.setValueAtTime(track.isMuted ? 0 : track.volume * track.normalize, CindaraAudio._state.audioContext.currentTime);
+                        if (track.source && CindaraAudio._state.isPlaying) {
+                            track.source.stop();
+                            track.source = null;
+                            CindaraAudio.Playback.togglePlay();
+                        }
+                    });
+
+                    const soloBtn = trackDiv.querySelector('.solo-btn');
+                    soloBtn.addEventListener('click', () => {
+                        track.isSoloed = !track.isSoloed;
+                        soloBtn.textContent = track.isSoloed ? 'Unsolo' : 'Solo';
+                        soloBtn.setAttribute('aria-label', `${track.isSoloed ? 'Unsolo' : 'Solo'} ${track.name}`);
+                        soloBtn.setAttribute('aria-checked', track.isSoloed);
+                        CindaraAudio.Playback.applySoloStates();
+                        if (track.source && CindaraAudio._state.isPlaying) {
+                            track.source.stop();
+                            track.source = null;
+                            CindaraAudio.Playback.togglePlay();
+                        }
+                    });
+
+                    const normalizeBtn = trackDiv.querySelector('.normalize-btn');
+                    normalizeBtn.addEventListener('click', () => CindaraAudio.Playback.normalizeTrack(track));
+
+                    const freezeBtn = trackDiv.querySelector('.freeze-btn');
+                    freezeBtn.addEventListener('click', () => {
+                        track.frozen = !track.frozen;
+                        freezeBtn.textContent = track.frozen ? 'Unfreeze' : 'Freeze';
+                        freezeBtn.setAttribute('aria-label', `${track.frozen ? 'Unfreeze' : 'Freeze'} ${track.name}`);
+                        freezeBtn.setAttribute('aria-checked', track.frozen);
+                        const controls = trackDiv.querySelectorAll('.volume-slider, .mute-btn, .solo-btn, .normalize-btn');
+                        controls.forEach(c => c.disabled = track.frozen);
+                    });
+
+                    const deleteBtn = trackDiv.querySelector('.delete-btn');
+                    deleteBtn.addEventListener('click', () => CindaraAudio.Core.deleteTrack(track.id));
+
+                    const waveform = trackDiv.querySelector('.waveform-container');
+                    let pinchStartDistance = null;
+                    waveform.addEventListener('wheel', (e) => {
+                        e.preventDefault();
+                        track.zoom = Math.max(0.1, Math.min(2, track.zoom + (e.deltaY > 0 ? -0.1 : 0.1)));
+                        CindaraAudio.UI.renderWaveform(track);
+                    });
+                    waveform.addEventListener('touchstart', (e) => {
+                        if (e.touches.length === 2) {
+                            const dx = e.touches[0].clientX - e.touches[1].clientX;
+                            const dy = e.touches[0].clientY - e.touches[1].clientY;
+                            pinchStartDistance = Math.sqrt(dx * dx + dy * dy);
+                        }
+                    });
+                    waveform.addEventListener('touchmove', (e) => {
+                        if (e.touches.length === 2 && pinchStartDistance) {
+                            const dx = e.touches[0].clientX - e.touches[1].clientX;
+                            const dy = e.touches[0].clientY - e.touches[1].clientY;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            const scale = distance / pinchStartDistance;
+                            track.zoom = Math.max(0.1, Math.min(2, track.zoom * scale));
+                            pinchStartDistance = distance;
+                            CindaraAudio.UI.renderWaveform(track);
+                        }
+                    });
+                    waveform.addEventListener('touchend', () => pinchStartDistance = null);
+                    waveform.addEventListener('click', (e) => CindaraAudio.Playback.seek(e, track));
+
+                    const startMarker = trackDiv.querySelector('.start-marker');
+                    const endMarker = trackDiv.querySelector('.end-marker');
+                    const updateMarker = (e) => {
+                        if (!CindaraAudio._state.draggedWarpMarker) return;
+                        const waveform = trackDiv.querySelector('.waveform-container');
+                        const rect = waveform.getBoundingClientRect();
+                        const x = (e.type === 'touchmove' ? e.touches[0].clientX : e.clientX) - rect.left - CindaraAudio._state.dragOffsetX;
+                        const percent = Math.max(0, Math.min(1, x / rect.width));
+                        const time = percent * track.audioBuffer.duration;
+                        const markerType = CindaraAudio._state.draggedWarpMarker.dataset.marker;
+                        if (markerType === 'start' && time < track.endMarker) {
+                            track.startMarker = time;
+                            startMarker.style.left = `${percent * 100}%`;
+                            startMarker.setAttribute('aria-valuenow', track.startMarker);
+                        } else if (markerType === 'end' && time > track.startMarker) {
+                            track.endMarker = time;
+                            endMarker.style.left = `${percent * 100}%`;
+                            endMarker.setAttribute('aria-valuenow', track.endMarker);
+                        }
+                    };
+                    startMarker.addEventListener('mousedown', (e) => {
+                        CindaraAudio._state.draggedWarpMarker = startMarker;
+                        CindaraAudio._state.dragOffsetX = e.clientX - startMarker.getBoundingClientRect().left;
+                    });
+                    endMarker.addEventListener('mousedown', (e) => {
+                        CindaraAudio._state.draggedWarpMarker = endMarker;
+                        CindaraAudio._state.dragOffsetX = e.clientX - endMarker.getBoundingClientRect().left;
+                    });
+                    startMarker.addEventListener('touchstart', (e) => {
+                        CindaraAudio._state.draggedWarpMarker = startMarker;
+                        CindaraAudio._state.dragOffsetX = e.touches[0].clientX - startMarker.getBoundingClientRect().left;
+                    });
+                    endMarker.addEventListener('touchstart', (e) => {
+                        CindaraAudio._state.draggedWarpMarker = endMarker;
+                        CindaraAudio._state.dragOffsetX = e.touches[0].clientX - endMarker.getBoundingClientRect().left;
+                    });
+                    document.addEventListener('mousemove', updateMarker);
+                    document.addEventListener('touchmove', updateMarker);
+                    document.addEventListener('mouseup', () => CindaraAudio._state.draggedWarpMarker = null);
+                    document.addEventListener('touchend', () => CindaraAudio._state.draggedWarpMarker = null);
+
+                    trackDiv.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', track.id);
+                        trackDiv.style.opacity = '0.5';
+                    });
+                    trackDiv.addEventListener('dragend', () => trackDiv.style.opacity = '1');
+                    CindaraAudio.UI.trackList.addEventListener('dragover', (e) => e.preventDefault());
+                    CindaraAudio.UI.trackList.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        const trackId = e.dataTransfer.getData('text/plain');
+                        const draggedTrack = CindaraAudio._state.tracks.find(t => t.id === trackId);
+                        const targetTrack = CindaraAudio._state.tracks.find(t => e.target.closest('.track')?.id === t.id);
+                        if (draggedTrack && targetTrack) {
+                            const draggedIndex = CindaraAudio._state.tracks.indexOf(draggedTrack);
+                            const targetIndex = CindaraAudio._state.tracks.indexOf(targetTrack);
+                            CindaraAudio._state.tracks.splice(draggedIndex, 1);
+                            CindaraAudio._state.tracks.splice(targetIndex, 0, draggedTrack);
+                            CindaraAudio.UI.trackList.innerHTML = '';
+                            CindaraAudio._state.tracks.forEach(t => CindaraAudio.UI.renderTrack(t));
+                        }
+                    });
+
+                    CindaraAudio.UI.renderWaveform(track);
+                },
+                renderWaveform: (track) => {
+                    const canvas = CindaraAudio.UI.trackList.querySelector(`#${track.id} .waveform-canvas`);
+                    if (!canvas || !track.audioBuffer) return;
+                    const ctx = canvas.getContext('2d');
+                    const dpr = window.devicePixelRatio || 1;
+                    const width = canvas.offsetWidth * dpr;
+                    const height = canvas.offsetHeight * dpr;
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.scale(dpr, dpr);
+                    const data = track.audioBuffer.getChannelData(0);
+                    const zoomWidth = width / track.zoom;
+                    const step = Math.ceil(data.length / zoomWidth);
+                    const samples = [];
+                    for (let i = 0; i < zoomWidth; i++) {
+                        let sum = 0;
+                        for (let j = 0; j < step; j++) {
+                            const index = i * step + j;
+                            if (index < data.length) sum += Math.abs(data[index]);
+                        }
+                        samples.push(sum / step * track.normalize * (track.isMuted ? 0 : track.volume));
+                    }
+                    ctx.clearRect(0, 0, width / dpr, height / dpr);
+                    const gradient = ctx.createLinearGradient(0, 0, width / dpr, 0);
+                    gradient.addColorStop(0, CindaraAudio._state.isDarkMode ? '#9A7CC4' : '#A084CA');
+                    gradient.addColorStop(1, CindaraAudio._state.isDarkMode ? '#6A7383' : '#6B728E');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.moveTo(0, height / dpr / 2);
+                    for (let i = 0; i < samples.length; i++) {
+                        const x = i * (width / dpr) / samples.length;
+                        const y = (height / dpr / 2) * (1 - samples[i]);
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.lineTo(width / dpr, height / dpr / 2);
+                    for (let i = samples.length - 1; i >= 0; i--) {
+                        const x = i * (width / dpr) / samples.length;
+                        const y = (height / dpr / 2) * (1 + samples[i]);
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            },
+            Playback: {
+                currentSources: {},
+                togglePlay: () => {
+                    if (!CindaraAudio._state.tracks.length) return;
+                    if (CindaraAudio._state.isPlaying) {
+                        CindaraAudio.Playback.pause();
+                    } else {
+                        CindaraAudio.Playback.play();
+                    }
+                },
+                play: () => {
+                    const anySolo = CindaraAudio._state.tracks.some(t => t.isSoloed);
+                    CindaraAudio._state.tracks.forEach(track => {
+                        if ((anySolo && !track.isSoloed) || track.isMuted || track.frozen) return;
+                        if (track.source) {
+                            track.source.stop();
+                            track.source = null;
+                        }
+                        track.source = CindaraAudio._state.audioContext.createBufferSource();
+                        track.source.buffer = track.audioBuffer;
+                        track.source.connect(track.gainNode);
+                        track.source.start(0, track.startMarker, track.endMarker - track.startMarker);
+                        track.source.onended = () => {
+                            track.source = null;
+                            if (!CindaraAudio._state.tracks.some(t => t.source)) {
+                                CindaraAudio._state.isPlaying = false;
+                                CindaraAudio.UI.playPauseButton.textContent = 'Play';
+                                CindaraAudio.UI.stopButton.disabled = true;
+                            }
+                        };
+                        CindaraAudio.Playback.currentSources[track.id] = track.source;
+                    });
+                    CindaraAudio._state.isPlaying = true;
+                    CindaraAudio.UI.playPauseButton.textContent = 'Pause';
+                    CindaraAudio.UI.stopButton.disabled = false;
+                },
+                pause: () => {
+                    Object.values(CindaraAudio.Playback.currentSources).forEach(source => source.stop());
+                    CindaraAudio.Playback.currentSources = {};
+                    CindaraAudio._state.tracks.forEach(track => track.source = null);
+                    CindaraAudio._state.isPlaying = false;
+                    CindaraAudio.UI.playPauseButton.textContent = 'Play';
+                },
+                stop: () => {
+                    CindaraAudio.Playback.pause();
+                    CindaraAudio._state.currentTime = 0;
+                    CindaraAudio.UI.stopButton.disabled = true;
+                },
+                seek: (event, track) => {
+                    if (!track.audioBuffer) return;
+                    const waveform = event.target.closest('.waveform-container');
+                    const clickX = event.clientX - waveform.getBoundingClientRect().left;
+                    const totalWidth = waveform.offsetWidth;
+                    const seekTime = track.startMarker + (clickX / totalWidth) * (track.endMarker - track.startMarker);
+                    if (track.source) {
+                        track.source.stop();
+                        track.source = null;
+                    }
+                    if (CindaraAudio._state.isPlaying) {
+                        track.source = CindaraAudio._state.audioContext.createBufferSource();
+                        track.source.buffer = track.audioBuffer;
+                        track.source.connect(track.gainNode);
+                        track.source.start(0, seekTime, track.endMarker - seekTime);
+                        track.source.onended = () => {
+                            track.source = null;
+                            if (!CindaraAudio._state.tracks.some(t => t.source)) {
+                                CindaraAudio._state.isPlaying = false;
+                                CindaraAudio.UI.playPauseButton.textContent = 'Play';
+                                CindaraAudio.UI.stopButton.disabled = true;
+                            }
+                        };
+                        CindaraAudio.Playback.currentSources[track.id] = track.source;
+                    }
+                },
+                toggleMute: (event) => {
+                    const trackId = event.target.dataset.trackId;
+                    const track = CindaraAudio._state.tracks.find(t => t.id === trackId);
+                    if (track) {
+                        track.isMuted = !track.isMuted;
+                        event.target.textContent = track.isMuted ? 'Unmute' : 'Mute';
+                        event.target.setAttribute('aria-label', `${track.isMuted ? 'Unmute' : 'Mute'} ${track.name}`);
+                        event.target.setAttribute('aria-checked', track.isMuted);
+                        track.gainNode.gain.setValueAtTime(track.isMuted ? 0 : track.volume * track.normalize, CindaraAudio._state.audioContext.currentTime);
+                        CindaraAudio.UI.renderWaveform(track);
+                    }
+                },
+                toggleSolo: (event) => {
+                    const trackId = event.target.dataset.trackId;
+                    const track = CindaraAudio._state.tracks.find(t => t.id === trackId);
+                    if (track) {
+                        track.isSoloed = !track.isSoloed;
+                        event.target.textContent = track.isSoloed ? 'Unsolo' : 'Solo';
+                        event.target.setAttribute('aria-label', `${track.isSoloed ? 'Unsolo' : 'Solo'} ${track.name}`);
+                        event.target.setAttribute('aria-checked', track.isSoloed);
+                        CindaraAudio.Playback.applySoloStates();
+                    }
+                },
+                applySoloStates: () => {
+                    const soloedTracks = CindaraAudio._state.tracks.filter(t => t.isSoloed);
+                    CindaraAudio._state.tracks.forEach(track => {
+                        if (soloedTracks.length > 0) {
+                            track.gainNode.gain.setValueAtTime(soloedTracks.includes(track) && !track.isMuted ? track.volume * track.normalize : 0, CindaraAudio._state.audioContext.currentTime);
+                        } else {
+                            track.gainNode.gain.setValueAtTime(track.isMuted ? 0 : track.volume * track.normalize, CindaraAudio._state.audioContext.currentTime);
+                        }
+                        CindaraAudio.UI.renderWaveform(track);
+                    });
+                },
+                setVolume: (event) => {
+                    const trackId = event.target.dataset.trackId;
+                    const track = CindaraAudio._state.tracks.find(t => t.id === trackId);
+                    if (track) {
+                        track.volume = parseFloat(event.target.value);
+                        track.gainNode.gain.setValueAtTime(track.isMuted ? 0 : track.volume * track.normalize, CindaraAudio._state.audioContext.currentTime);
+                        CindaraAudio.UI.renderWaveform(track);
+                    }
+                },
+                normalizeTrack: (track) => {
+                    const data = track.audioBuffer.getChannelData(0);
+                    let max = 0;
+                    for (let i = 0; i < data.length; i++) {
+                        max = Math.max(max, Math.abs(data[i]));
+                    }
+                    if (max > 0) {
+                        track.normalize = 1 / max;
+                        track.gainNode.gain.setValueAtTime(track.isMuted ? 0 : track.volume * track.normalize, CindaraAudio._state.audioContext.currentTime);
+                        const volumeSlider = CindaraAudio.UI.trackList.querySelector(`#${track.id} .volume-slider`);
+                        if (volumeSlider) volumeSlider.value = track.volume;
+                        CindaraAudio.UI.renderWaveform(track);
+                    }
+                }
+            },
+            Core: {
+                init: () => {
+                    CindaraAudio.UI.bind();
+                    CindaraAudio.Core.loadTheme();
+                    console.log('[CindaraAudio.Core] Initialized.');
+                },
+                loadTheme: () => {
+                    const saved = localStorage.getItem('cindara-audio-settings');
+                    if (saved) {
+                        const { theme, isDarkMode } = JSON.parse(saved);
+                        CindaraAudio._state.theme = theme || 'default';
+                        CindaraAudio._state.isDarkMode = isDarkMode || false;
+                        CindaraAudio.UI.themeSelect.value = CindaraAudio._state.theme;
+                        CindaraAudio.UI.darkModeButton.textContent = `Dark Mode: ${CindaraAudio._state.isDarkMode ? 'On' : 'Off'}`;
+                        document.body.classList.toggle('dark', CindaraAudio._state.isDarkMode);
+                        CindaraAudio.UI.themeSelect.disabled = CindaraAudio._state.isDarkMode;
+                        CindaraAudio.UI.themeSelect.style.opacity = CindaraAudio._state.isDarkMode ? '0.5' : '1';
+                        CindaraAudio.Core.updateTheme();
+                    }
+                },
+                saveTheme: () => {
+                    localStorage.setItem('cindara-audio-settings', JSON.stringify({
+                        theme: CindaraAudio._state.theme,
+                        isDarkMode: CindaraAudio._state.isDarkMode
+                    }));
+                },
+                updateTheme: () => {
+                    const colors = {
+                        default: { bg: 'linear-gradient(135deg, #A084CA, #6B728E)', text: '#1A1E2E' },
+                        ocean: { bg: 'linear-gradient(135deg, #2A9D8F, #00D4FF)', text: '#fff' },
+                        sunset: { bg: 'linear-gradient(135deg, #F4A261, #FF6B6B)', text: '#fff' }
+                    };
+                    if (!CindaraAudio._state.isDarkMode) {
+                        document.body.style.background = colors[CindaraAudio._state.theme].bg;
+                        document.body.style.color = colors[CindaraAudio._state.theme].text;
+                    }
+                    CindaraAudio.Core.saveTheme();
+                },
+                handleFileUpload: (event) => {
+                    CindaraAudio.Core.loadFiles(event.target.files);
+                    event.target.value = '';
+                },
+                handleDragOver: (event) => {
+                    event.preventDefault();
+                    CindaraAudio.UI.dropZone.classList.add('dragover');
+                },
+                handleFileDrop: (event) => {
+                    event.preventDefault();
+                    CindaraAudio.UI.dropZone.classList.remove('dragover');
+                    CindaraAudio.Core.loadFiles(event.dataTransfer.files);
+                },
+                loadFiles: (files) => {
+                    Array.from(files).forEach(file => {
+                        if (file.type === 'audio/mpeg' || file.type === 'audio/wav') {
+                            CindaraAudio.Core.addTrack(file);
+                        } else {
+                            alert(`Invalid file: ${file.name}. Please upload .mp3 or .wav files.`);
+                        }
+                    });
+                },
+                addTrack: async (file) => {
+                    try {
+                        CindaraAudio.UI.dropZone.textContent = 'Loading...';
+                        const trackId = `track-${Date.now()}`;
+                        const arrayBuffer = await file.arrayBuffer();
+                        const audioBuffer = await CindaraAudio._state.audioContext.decodeAudioData(arrayBuffer);
+                        const track = {
+                            id: trackId,
+                            name: file.name,
+                            audioBuffer: audioBuffer,
+                            gainNode: CindaraAudio._state.audioContext.createGain(),
+                            volume: 1,
+                            isMuted: false,
+                            isSoloed: false,
+                            isPlaying: false,
+                            startMarker: 0,
+                            endMarker: audioBuffer.duration,
+                            normalize: 1,
+                            frozen: false,
+                            zoom: 1,
+                            source: null
+                        };
+                        track.gainNode.connect(CindaraAudio._state.audioContext.destination);
+                        CindaraAudio._state.tracks.push(track);
+                        CindaraAudio.UI.renderTrack(track);
+                        CindaraAudio.UI.exportMixButton.disabled = false;
+                        CindaraAudio.UI.dropZone.textContent = 'Drag & Drop .mp3/.wav Files';
+                    } catch (error) {
+                        CindaraAudio.UI.dropZone.textContent = 'Drag & Drop .mp3/.wav Files';
+                        alert('Error loading audio file. Please ensure it is a valid .mp3 or .wav.');
+                        console.error(`[CindaraAudio.Core] Error decoding audio file: ${error}`);
+                    }
+                },
+                deleteTrack: (trackId) => {
+                    const track = CindaraAudio._state.tracks.find(t => t.id === trackId);
+                    if (track.source) {
+                        track.source.stop();
+                        track.source = null;
+                    }
+                    CindaraAudio._state.tracks = CindaraAudio._state.tracks.filter(t => t.id !== trackId);
+                    const trackElement = CindaraAudio.UI.trackList.querySelector(`#${trackId}`);
+                    if (trackElement) trackElement.remove();
+                    if (!CindaraAudio._state.tracks.length) {
+                        CindaraAudio.UI.exportMixButton.disabled = true;
+                    }
+                },
+                freezeTrack: (track) => {
+                    track.frozen = !track.frozen;
+                    const trackElement = CindaraAudio.UI.trackList.querySelector(`#${track.id}`);
+                    const controls = trackElement.querySelectorAll('.volume-slider, .mute-btn, .solo-btn, .normalize-btn');
+                    controls.forEach(c => c.disabled = track.frozen);
+                    const freezeBtn = trackElement.querySelector('.freeze-btn');
+                    freezeBtn.textContent = track.frozen ? 'Unfreeze' : 'Freeze';
+                    freezeBtn.setAttribute('aria-label', `${track.frozen ? 'Unfreeze' : 'Freeze'} ${track.name}`);
+                    freezeBtn.setAttribute('aria-checked', track.frozen);
+                },
+                saveSession: () => {
+                    const session = {
+                        tracks: CindaraAudio._state.tracks.map(track => ({
+                            id: track.id,
+                            name: track.name,
+                            volume: track.volume,
+                            isMuted: track.isMuted,
+                            isSoloed: track.isSoloed,
+                            startMarker: track.startMarker,
+                            endMarker: track.endMarker,
+                            normalize: track.normalize,
+                            frozen: track.frozen,
+                            zoom: track.zoom
+                        })),
+                        theme: CindaraAudio._state.theme,
+                        isDarkMode: CindaraAudio._state.isDarkMode
+                    };
+                    localStorage.setItem('cindara-audio-session', JSON.stringify(session));
+                    alert('Session saved successfully.');
+                },
+                loadSession: () => {
+                    const session = localStorage.getItem('cindara-audio-session');
+                    if (session) {
+                        const data = JSON.parse(session);
+                        CindaraAudio._state.theme = data.theme;
+                        CindaraAudio._state.isDarkMode = data.isDarkMode;
+                        CindaraAudio.UI.themeSelect.value = data.theme;
+                        CindaraAudio.UI.darkModeButton.textContent = `Dark Mode: ${data.isDarkMode ? 'On' : 'Off'}`;
+                        document.body.classList.toggle('dark', data.isDarkMode);
+                        CindaraAudio.UI.themeSelect.disabled = data.isDarkMode;
+                        CindaraAudio.UI.themeSelect.style.opacity = data.isDarkMode ? '0.5' : '1';
+                        CindaraAudio.Core.updateTheme();
+                        if (data.tracks.length) {
+                            alert('Session loaded. Please re-upload audio files for the tracks.');
+                            CindaraAudio._state.tracks = data.tracks.map(track => ({
+                                ...track,
+                                audioBuffer: null,
+                                gainNode: null,
+                                source: null
+                            }));
+                            CindaraAudio.UI.trackList.innerHTML = '';
+                            CindaraAudio._state.tracks.forEach(track => {
+                                const trackDiv = document.createElement('div');
+                                trackDiv.classList.add('track');
+                                trackDiv.setAttribute('role', 'listitem');
+                                trackDiv.id = track.id;
+                                trackDiv.innerHTML = `
+                                    <div class="track-controls">
+                                        <div class="track-label" aria-label="Track: ${track.name}">${track.name}</div>
+                                        <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="${track.volume}" aria-label="Volume for ${track.name}" disabled>
+                                        <button class="mute-btn" aria-label="${track.isMuted ? 'Unmute' : 'Mute'} ${track.name}" aria-checked="${track.isMuted}" disabled>${track.isMuted ? 'Unmute' : 'Mute'}</button>
+                                        <button class="solo-btn" aria-label="${track.isSoloed ? 'Unsolo' : 'Solo'} ${track.name}" aria-checked="${track.isSoloed}" disabled>${track.isSoloed ? 'Unsolo' : 'Solo'}</button>
+                                        <button class="normalize-btn" aria-label="Normalize ${track.name}" disabled>Normalize</button>
+                                        <button class="freeze-btn" aria-label="${track.frozen ? 'Unfreeze' : 'Freeze'} ${track.name}" ${track.frozen ? 'aria-checked="true"' : ''} disabled>${track.frozen ? 'Unfreeze' : 'Freeze'}</button>
+                                        <button class="delete-btn" aria-label="Delete ${track.name}">Delete</button>
+                                        <button class="stem-split-btn" disabled aria-label="Split Stems for ${track.name} (Coming Soon)">Stem Split</button>
+                                        <button class="transcribe-btn" disabled aria-label="Transcribe ${track.name} (Coming Soon)">Transcribe</button>
+                                    </div>
+                                    <div class="waveform-container" role="region" aria-label="Waveform for ${track.name}">
+                                        <canvas class="waveform-canvas"></canvas>
+                                        <div class="grid-lines"></div>
+                                        <div class="warp-marker start-marker" style="left: 0%" role="slider" aria-label="Start Marker for ${track.name}" aria-valuemin="0" aria-valuenow="0" disabled></div>
+                                        <div class="warp-marker end-marker" style="left: 100%" role="slider" aria-label="End Marker for ${track.name}" aria-valuemin="0" aria-valuenow="0" disabled></div>
+                                    </div>
+                                `;
+                                CindaraAudio.UI.trackList.appendChild(trackDiv);
+                                const deleteBtn = trackDiv.querySelector('.delete-btn');
+                                deleteBtn.addEventListener('click', () => CindaraAudio.Core.deleteTrack(track.id));
+                            });
+                        }
+                    }
+                },
+                exportMix: async () => {
+                    if (!CindaraAudio._state.tracks.length) return;
+                    CindaraAudio.UI.exportMixButton.disabled = true;
+                    CindaraAudio.UI.exportMixButton.textContent = 'Exporting...';
+                    try {
+                        const maxDuration = Math.max(...CindaraAudio._state.tracks.map(t => t.endMarker));
+                        const offlineContext = new OfflineAudioContext(2, maxDuration * 44100, 44100);
+                        const finalMixGain = offlineContext.createGain();
+                        finalMixGain.connect(offlineContext.destination);
+                        const anySolo = CindaraAudio._state.tracks.some(t => t.isSoloed);
+                        CindaraAudio._state.tracks.forEach(track => {
+                            if ((anySolo && !track.isSoloed) || track.isMuted || track.frozen) return;
+                            const source = offlineContext.createBufferSource();
+                            source.buffer = track.audioBuffer;
+                            const gainNode = offlineContext.createGain();
+                            gainNode.gain.setValueAtTime(track.isMuted ? 0 : track.volume * track.normalize, 0);
+                            source.connect(gainNode);
+                            gainNode.connect(finalMixGain);
+                            source.start(0, track.startMarker, track.endMarker - track.startMarker);
+                        });
+                        const renderedBuffer = await offlineContext.startRendering();
+                        const wavBlob = await CindaraAudio.Core.audioBufferToWav(renderedBuffer);
+                        const url = URL.createObjectURL(wavBlob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `cindara-mix-${Date.now()}.wav`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    } catch (error) {
+                        alert('Error exporting mix. Please try again.');
+                        console.error(`[CindaraAudio.Core] Export failed: ${error}`);
+                    } finally {
+                        CindaraAudio.UI.exportMixButton.disabled = false;
+                        CindaraAudio.UI.exportMixButton.textContent = 'Export Full Mix';
+                    }
+                },
+                audioBufferToWav: (audioBuffer) => {
+                    return new Promise((resolve) => {
+                        const numberOfChannels = audioBuffer.numberOfChannels;
+                        const sampleRate = audioBuffer.sampleRate;
+                        const length = audioBuffer.length;
+                        const buffer = new ArrayBuffer(44 + length * numberOfChannels * 2);
+                        const view = new DataView(buffer);
+                        CindaraAudio.Core.writeString(view, 0, 'RIFF');
+                        view.setUint32(4, 32 + length * numberOfChannels * 2, true);
+                        CindaraAudio.Core.writeString(view, 8, 'WAVE');
+                        CindaraAudio.Core.writeString(view, 12, 'fmt ');
+                        view.setUint32(16, 16, true);
+                        view.setUint16(20, 1, true);
+                        view.setUint16(22, numberOfChannels, true);
+                        view.setUint32(24, sampleRate, true);
+                        view.setUint32(28, sampleRate * numberOfChannels * 2, true);
+                        view.setUint16(32, numberOfChannels * 2, true);
+                        view.setUint16(34, 16, true);
+                        CindaraAudio.Core.writeString(view, 36, 'data');
+                        view.setUint32(40, length * numberOfChannels * 2, true);
+                        for (let channel = 0; channel < numberOfChannels; channel++) {
+                            const data = audioBuffer.getChannelData(channel);
+                            for (let i = 0, offset = 44; i < length; i++, offset += numberOfChannels * 2) {
+                                const s = Math.max(-1, Math.min(1, data[i]));
+                                view.setInt16(offset + channel * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+                            }
+                        }
+                        resolve(new Blob([view], { type: 'audio/wav' }));
+                    });
+                },
+                writeString: (view, offset, string) => {
+                    for (let i = 0; i < string.length; i++) {
+                        view.setUint8(offset + i, string.charCodeAt(i));
+                    }
+                },
+                stemSplit: () => {
+                    console.log('[CindaraAudio.Core] Stem Split functionality (placeholder).');
+                    alert('Stem Split functionality coming soon!');
+                },
+                transcribe: () => {
+                    console.log('[CindaraAudio.Core] Transcribe functionality (placeholder).');
+                    alert('Transcription functionality coming soon!');
+                },
+                exportStems: () => {
+                    console.log('[CindaraAudio.Core] Export Stems functionality (placeholder).');
+                    alert('Exporting stems as ZIP coming soon!');
+                },
+                exportTranscript: () => {
+                    console.log('[CindaraAudio.Core] Export Transcript functionality (placeholder).');
+                    alert('Exporting transcript as TXT coming soon!');
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', CindaraAudio.Core.init);
+    </script>
+</body>
+</html>
