@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<<<<<<< HEAD
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cindara Audio</title>
@@ -1051,3 +1052,82 @@
     </script>
 </body>
 </html>
+=======
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dopple RDK</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Ensure body has black background and no default margins */
+    body { margin: 0; background: #000; color: #fff; }
+    /* Background video covers entire viewport */
+    #bg-video { 
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; 
+      object-fit: cover;
+      z-index: -1;
+    }
+    /* Centered container for heading and button */
+    #content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    /* Bold heading style (larger font) */
+    #content h1 { font-size: 2em; font-weight: bold; margin-bottom: 1em; }
+    /* Button styling as originally shown */
+    #content button {
+      padding: 0.75em 1.5em;
+      font-size: 1em;
+      font-weight: bold;
+      color: #fff;
+      background: transparent;
+      border: 2px solid #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #content button:hover { background: rgba(255,255,255,0.2); }
+  </style>
+</head>
+<body>
+  <!-- Autoplay looping background video (muted and inline for no user interaction issues) -->
+  <video id="bg-video" autoplay loop muted playsinline>
+    <source src="men-facing.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Centered content: bold title and "The Loop Core" button -->
+  <div id="content">
+    <h1>Dopple RDK</h1>
+    <button id="enter-button">The Loop Core</button>
+  </div>
+
+  <!-- Hidden audio element for glitch sound effect -->
+  <audio id="glitch-sound" src="glitch.mp3" preload="auto"></audio>
+
+  <!-- Script: play glitch sound on button click, then redirect to core.html -->
+  <script>
+    const enterButton = document.getElementById('enter-button');
+    const glitchSound = document.getElementById('glitch-sound');
+    enterButton.addEventListener('click', () => {
+      // Play the glitch sound (will only play on user interaction)
+      glitchSound.play().catch(err => console.error('Glitch sound play failed:', err));
+      // After sound ends, navigate to core.html
+      glitchSound.addEventListener('ended', () => {
+        window.location.href = 'core.html';
+      });
+      // Fallback: in case the 'ended' event doesn't fire (e.g., audio not available), 
+      // force redirect after a short delay so the user isn’t stuck.
+      setTimeout(() => {
+        window.location.href = 'core.html';
+      }, 1200);
+    });
+  </script>
+</body>
+</html>
+>>>>>>> 35ccd9c54501316654a1b031a719a5bfc151774c
