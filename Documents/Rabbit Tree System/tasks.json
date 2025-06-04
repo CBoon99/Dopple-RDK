@@ -1,0 +1,34 @@
+{
+  "tasks": [
+    {
+      "id": "bed",
+      "name_en": "Make bed",
+      "name_id": "Merapikan tempat tidur",
+      "required": true
+    },
+    {
+      "id": "bathroom",
+      "name_en": "Clean bathroom",
+      "name_id": "Membersihkan kamar mandi",
+      "required": true
+    },
+    {
+      "id": "floor",
+      "name_en": "Sweep and mop floor",
+      "name_id": "Menyapu dan mengepel lantai",
+      "required": true
+    },
+    {
+      "id": "dust",
+      "name_en": "Dust surfaces",
+      "name_id": "Membersihkan debu",
+      "required": true
+    },
+    {
+      "id": "trash",
+      "name_en": "Empty trash bins",
+      "name_id": "Mengosongkan tempat sampah",
+      "required": true
+    }
+  ]
+} 

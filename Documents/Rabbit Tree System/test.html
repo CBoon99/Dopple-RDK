@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rabbit Tree System - Test Suite</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        #testOutput {
+            font-family: monospace;
+            white-space: pre-wrap;
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rabbit Tree System - Test Suite</h1>
+        <button onclick="runTests()">Run Tests</button>
+        <div id="testOutput"></div>
+    </div>
+
+    <!-- Load system modules -->
+    <script src="modules/auth.js"></script>
+    <script src="modules/rooms.js"></script>
+    <script src="modules/tasks.js"></script>
+    <script src="modules/storage.js"></script>
+    <script src="modules/i18n.js"></script>
+    
+    <!-- Load test modules -->
+    <script src="test-logger.js"></script>
+    <script src="test-runner.js"></script>
+    
+    <!-- Load main system -->
+    <script src="main.js"></script>
+    
+    <script>
+        // Override console.log to capture output
+        const originalConsoleLog = console.log;
+        const testOutput = document.getElementById('testOutput');
+        
+        console.log = function() {
+            const args = Array.from(arguments);
+            const message = args.join(' ');
+            testOutput.textContent += message + '\n';
+            originalConsoleLog.apply(console, arguments);
+        };
+        
+        window.addEventListener('load', async () => {
+            await RoomForImprovementSystem.init();
+            console.log('Modules:', RoomForImprovementSystem.modules);
+            // Enable the Run Tests button now that everything is ready
+            document.querySelector('button').disabled = false;
+        });
+        
+        async function runTests() {
+            testOutput.textContent = '';
+            await TestRunner.runAllTests();
+        }
+    </script>
+</body>
+</html> 

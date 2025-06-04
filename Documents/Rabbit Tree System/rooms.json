@@ -1,0 +1,44 @@
+{
+  "rooms": [
+    {
+      "id": "101",
+      "name_en": "Room 101",
+      "name_id": "Kamar 101"
+    },
+    {
+      "id": "102",
+      "name_en": "Room 102",
+      "name_id": "Kamar 102"
+    },
+    {
+      "id": "103",
+      "name_en": "Room 103",
+      "name_id": "Kamar 103"
+    },
+    {
+      "id": "104",
+      "name_en": "Room 104",
+      "name_id": "Kamar 104"
+    },
+    {
+      "id": "105",
+      "name_en": "Room 105",
+      "name_id": "Kamar 105"
+    },
+    {
+      "id": "106",
+      "name_en": "Room 106",
+      "name_id": "Kamar 106"
+    },
+    {
+      "id": "107",
+      "name_en": "Room 107",
+      "name_id": "Kamar 107"
+    },
+    {
+      "id": "108",
+      "name_en": "Room 108",
+      "name_id": "Kamar 108"
+    }
+  ]
+} 

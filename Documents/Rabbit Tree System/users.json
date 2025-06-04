@@ -1,0 +1,68 @@
+{
+  "users": [
+    {
+      "id": "owner1",
+      "role": "owner",
+      "name": "System Owner",
+      "password": "changeme",
+      "created_at": "2024-03-20T00:00:00Z",
+      "last_login": null
+    },
+    {
+      "id": "manager1",
+      "role": "manager",
+      "name": "Manager One",
+      "password": "changeme",
+      "created_at": "2024-03-20T00:00:00Z",
+      "last_login": null
+    },
+    {
+      "id": "supervisor1",
+      "role": "supervisor",
+      "name": "Supervisor One",
+      "password": "changeme",
+      "created_at": "2024-03-20T00:00:00Z",
+      "last_login": null
+    },
+    {
+      "id": "staff1",
+      "role": "staff",
+      "name": "Staff One",
+      "password": "changeme",
+      "created_at": "2024-03-20T00:00:00Z",
+      "last_login": null
+    },
+    {
+      "id": "staff2",
+      "role": "staff",
+      "name": "Staff Two",
+      "password": "changeme",
+      "created_at": "2024-03-20T00:00:00Z",
+      "last_login": null
+    },
+    {
+      "id": "staff3",
+      "role": "staff",
+      "name": "Staff Three",
+      "password": "changeme",
+      "created_at": "2024-03-20T00:00:00Z",
+      "last_login": null
+    },
+    {
+      "id": "staff6",
+      "role": "staff",
+      "name": "Staff Six",
+      "password": "changeme",
+      "created_at": "2024-03-20T00:00:00Z",
+      "last_login": null
+    },
+    {
+      "id": "sup2",
+      "role": "supervisor",
+      "name": "Supervisor Two",
+      "password": "changeme",
+      "created_at": "2024-03-20T00:00:00Z",
+      "last_login": null
+    }
+  ]
+} 
