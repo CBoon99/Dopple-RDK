@@ -1,195 +1,1701 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Management System</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Rabbit Hostel Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Modern UI Components */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 24px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #56ab2f, #a8e6cf);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Dashboard Styles */
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, #56ab2f, #a8e6cf);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Task List */
+        .task-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 5px 0;
+            background: rgba(240, 240, 240, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .task-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .task-item.completed {
+            background: rgba(86, 171, 47, 0.1);
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        .flash-success {
+            animation: flashGreen 0.8s ease;
+        }
+
+        @keyframes flashGreen {
+            0% { background-color: transparent; }
+            50% { background-color: #56ab2f; color: white; }
+            100% { background-color: transparent; }
+        }
+
+        /* Analytics Charts */
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            min-height: 200px;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            margin: 10px;
+        }
+
+        .metric-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Department Placeholders */
+        .department-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .department-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .department-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Hide elements by default */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error States */
+        .error-message {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">🏨 Room Management</div>
-        <div class="header-controls">
-            <button id="language-toggle" class="btn btn-secondary">EN</button>
-            <button id="theme-toggle" class="btn btn-secondary">🌙</button>
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <button class="btn btn-primary" onclick="switchLanguage('en')" id="lang-en">EN</button>
+        <button class="btn btn-primary" onclick="switchLanguage('id')" id="lang-id">ID</button>
+    </div>
+
+    <!-- Error Message Container -->
+    <div id="error-container">
+        <div id="error-message" class="error-message"></div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="login-screen">
+            <div class="login-card">
+                <h1 id="app-title">🐰 Rabbit Hostel System</h1>
+                <h3 id="login-subtitle">Staff Login</h3>
+                <input type="text" id="username" class="input-field" placeholder="User ID" autocomplete="username">
+                <input type="password" id="password" class="input-field" placeholder="Password" autocomplete="current-password">
+                <button class="btn btn-primary" onclick="login()" id="login-btn">
+                    <span id="login-text">Login</span>
+                    <span id="login-loading" class="loading" style="display: none;"></span>
+                </button>
+                <div style="margin-top: 20px; font-size: 12px; color: #666;">
+                    <p id="demo-info">Demo: Use "owner1/admin123" for setup</p>
+                </div>
+            </div>
         </div>
-    </header>
+    </div>
 
-    <main class="container">
-        <!-- Login Section -->
-        <section id="login-section" class="panel">
-            <div class="panel-header">
-                <h2 class="panel-title">Login</h2>
-            </div>
-            <form id="login-form" class="form-group">
-                <div class="form-group">
-                    <label class="form-label" for="user-id">User ID</label>
-                    <input type="text" id="user-id" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
-                    <input type="password" id="password" class="form-input" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
-        </section>
-
-        <!-- Staff Controls -->
-        <section id="staff-controls" class="panel hidden">
-            <div class="panel-header">
-                <h2 class="panel-title">Room Cleaning</h2>
-                <div class="daily-count">0/5</div>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="room-select">Select Room</label>
-                <select id="room-select" class="form-input">
-                    <option value="">Choose a room...</option>
-                </select>
-            </div>
-            <div id="task-list" class="task-list"></div>
-            <div class="button-group">
-                <button id="start-cleaning" class="btn btn-primary">Start Cleaning</button>
-                <button id="complete-cleaning" class="btn btn-primary" disabled>Complete Cleaning</button>
-            </div>
-        </section>
-
-        <!-- Supervisor Controls -->
-        <section id="supervisor-controls" class="panel hidden">
-            <div class="panel-header">
-                <h2 class="panel-title">Spot Check</h2>
-                <div class="daily-count">0/1</div>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="spot-check-room">Select Room</label>
-                <select id="spot-check-room" class="form-input">
-                    <option value="">Choose a room...</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="spot-check-notes">Notes</label>
-                <textarea id="spot-check-notes" class="form-input" rows="4"></textarea>
-            </div>
-            <div class="button-group">
-                <button id="start-spot-check" class="btn btn-primary">Start Spot Check</button>
-                <button id="submit-spot-check" class="btn btn-primary" disabled>Submit Spot Check</button>
-            </div>
-        </section>
-
-        <!-- Owner Controls -->
-        <section id="owner-controls" class="panel hidden">
-            <div class="panel-header">
-                <h2 class="panel-title">Configuration</h2>
-            </div>
-            <div class="config-tabs">
-                <button class="btn btn-secondary active" data-tab="rooms">Rooms</button>
-                <button class="btn btn-secondary" data-tab="tasks">Tasks</button>
-                <button class="btn btn-secondary" data-tab="users">Users</button>
-                <button class="btn btn-secondary" data-tab="settings">Settings</button>
-            </div>
-            
-            <!-- Rooms Config -->
-            <div id="rooms-config" class="config-content active">
-                <div class="form-group">
-                    <label class="form-label">Add New Room</label>
-                    <div class="form-row">
-                        <input type="text" id="new-room-id" class="form-input" placeholder="Room ID">
-                        <input type="text" id="new-room-name-en" class="form-input" placeholder="Room Name (EN)">
-                        <input type="text" id="new-room-name-id" class="form-input" placeholder="Room Name (ID)">
-                        <button id="add-room" class="btn btn-primary">Add Room</button>
+    <!-- Owner Setup Screen -->
+    <div id="setup-screen" class="screen">
+        <div class="container">
+            <div class="card">
+                <h1 id="setup-title">🚀 Welcome to Rabbit Hostel System</h1>
+                <h3 id="setup-subtitle">Initial Owner Setup</h3>
+                
+                <div class="dashboard-grid">
+                    <div>
+                        <h4 id="owner-details">Owner Details</h4>
+                        <input type="text" id="owner-username" class="input-field" placeholder="Owner Username" value="owner1">
+                        <input type="password" id="owner-password" class="input-field" placeholder="Set Password">
+                        <input type="text" id="hostel-name" class="input-field" placeholder="Hostel Name" value="Rabbit Dreams Hostel">
                     </div>
-                </div>
-                <div id="rooms-list" class="list-container"></div>
-            </div>
-
-            <!-- Tasks Config -->
-            <div id="tasks-config" class="config-content">
-                <div class="form-group">
-                    <label class="form-label">Add New Task</label>
-                    <div class="form-row">
-                        <input type="text" id="new-task-id" class="form-input" placeholder="Task ID">
-                        <input type="text" id="new-task-name-en" class="form-input" placeholder="Task Name (EN)">
-                        <input type="text" id="new-task-name-id" class="form-input" placeholder="Task Name (ID)">
-                        <button id="add-task" class="btn btn-primary">Add Task</button>
-                    </div>
-                </div>
-                <div id="tasks-list" class="list-container"></div>
-            </div>
-
-            <!-- Users Config -->
-            <div id="users-config" class="config-content">
-                <div class="form-group">
-                    <label class="form-label">Add New User</label>
-                    <div class="form-row">
-                        <input type="text" id="new-user-id" class="form-input" placeholder="User ID">
-                        <select id="new-user-role" class="form-input">
-                            <option value="staff">Staff</option>
-                            <option value="supervisor">Supervisor</option>
-                            <option value="owner">Owner</option>
+                    
+                    <div>
+                        <h4 id="system-language">System Language</h4>
+                        <select id="default-language" class="input-field">
+                            <option value="en">English</option>
+                            <option value="id">Bahasa Indonesia</option>
                         </select>
-                        <input type="text" id="new-user-name" class="form-input" placeholder="Name">
-                        <input type="password" id="new-user-password" class="form-input" placeholder="Password">
-                        <button id="add-user" class="btn btn-primary">Add User</button>
+                        <button class="btn btn-success" onclick="completeSetup()" id="setup-complete-btn">Complete Setup</button>
                     </div>
                 </div>
-                <div id="users-list" class="list-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Owner Dashboard -->
+    <div id="owner-dashboard" class="screen">
+        <div class="container">
+            <div class="dashboard-header">
+                <div>
+                    <h1 id="owner-welcome">Welcome, Owner!</h1>
+                    <p id="owner-subtitle">System Configuration & Management</p>
+                </div>
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
             </div>
 
-            <!-- Settings Config -->
-            <div id="settings-config" class="config-content">
-                <div class="form-group">
-                    <label class="form-label" for="max-rooms-per-staff">Maximum Rooms per Staff</label>
-                    <input type="number" id="max-rooms-per-staff" class="form-input" min="1" max="10">
+            <div class="dashboard-grid">
+                <!-- Quick Actions -->
+                <div class="card">
+                    <h3 id="quick-actions">⚡ Quick Actions</h3>
+                    <button class="btn btn-primary" onclick="showScreen('room-management')">Manage Rooms</button>
+                    <button class="btn btn-primary" onclick="showScreen('user-management')">Manage Users</button>
+                    <button class="btn btn-primary" onclick="showScreen('analytics-dashboard')">View Analytics</button>
+                    <button class="btn btn-primary" onclick="showScreen('system-settings')">System Settings</button>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="spot-check-time">Spot Check Time</label>
-                    <input type="time" id="spot-check-time" class="form-input">
-                </div>
-                <button id="save-config" class="btn btn-primary">Save Settings</button>
-            </div>
-        </section>
 
-        <!-- Manager Controls -->
-        <section id="manager-controls" class="panel hidden">
-            <div class="panel-header">
-                <h2 class="panel-title">Analytics Dashboard</h2>
-            </div>
-            <div class="analytics-tabs">
-                <button class="btn btn-secondary active" data-tab="daily">Daily Overview</button>
-                <button class="btn btn-secondary" data-tab="staff">Staff Performance</button>
-                <button class="btn btn-secondary" data-tab="quality">Quality Metrics</button>
-            </div>
-            <div id="analytics-content" class="analytics-content">
-                <div class="dashboard-card">
-                    <h3>Today's Overview</h3>
-                    <div id="daily-stats"></div>
-                </div>
-                <div class="dashboard-card">
-                    <h3>Staff Performance</h3>
-                    <div id="staff-stats"></div>
-                </div>
-                <div class="dashboard-card">
-                    <h3>Quality Metrics</h3>
-                    <div id="quality-stats"></div>
+                <!-- System Status -->
+                <div class="card">
+                    <h3 id="system-status">📊 System Status</h3>
+                    <div id="system-stats">
+                        <p>Total Rooms: <strong id="total-rooms">15</strong></p>
+                        <p>Active Staff: <strong id="active-staff">0</strong></p>
+                        <p>Today's Cleanings: <strong id="todays-cleanings">0</strong></p>
+                        <p>Spot Checks: <strong id="todays-spotchecks">0</strong></p>
+                    </div>
                 </div>
             </div>
-        </section>
-    </main>
 
-    <script src="i18n.js"></script>
-    <script src="auth.js"></script>
-    <script src="main.js"></script>
-    <script src="scripts/test-logger.js"></script>
-    <script src="scripts/test-runner.js"></script>
+            <!-- Department Placeholders -->
+            <div class="card">
+                <h3 id="departments-title">🏨 Department Modules</h3>
+                <div class="department-grid" id="department-grid">
+                    <!-- Departments will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff Dashboard -->
+    <div id="staff-dashboard" class="screen">
+        <div class="container">
+            <div class="dashboard-header">
+                <div>
+                    <h1 id="staff-welcome">Welcome, Staff!</h1>
+                    <p id="staff-progress">Progress: <span id="rooms-completed">0</span>/<span id="rooms-assigned">0</span> rooms</p>
+                </div>
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
+
+            <!-- Progress Overview -->
+            <div class="card">
+                <h3 id="daily-progress">📈 Daily Progress</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="staff-progress-bar" style="width: 0%"></div>
+                </div>
+                <p id="progress-text">0% Complete</p>
+            </div>
+
+            <!-- Assigned Rooms -->
+            <div class="card">
+                <h3 id="assigned-rooms">🏠 Your Assigned Rooms</h3>
+                <div id="staff-rooms-list">
+                    <!-- Rooms will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room Cleaning Interface -->
+    <div id="room-cleaning" class="screen">
+        <div class="container">
+            <div class="dashboard-header">
+                <div>
+                    <h1 id="cleaning-room-name">Room: --</h1>
+                    <p id="cleaning-status">Ready to start</p>
+                </div>
+                <div>
+                    <button class="btn btn-primary" onclick="goBack()">Back</button>
+                    <button class="btn btn-danger" onclick="logout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Task Progress -->
+                <div class="card">
+                    <h3 id="task-progress">✅ Task Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="task-progress-bar" style="width: 0%"></div>
+                    </div>
+                    <p id="task-progress-text">0/0 tasks completed</p>
+                    
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-success" id="start-cleaning-btn" onclick="startCleaning()">Start Cleaning</button>
+                        <button class="btn btn-success" id="complete-cleaning-btn" onclick="completeCleaning()" style="display: none;">Complete Cleaning</button>
+                    </div>
+                </div>
+
+                <!-- Tasks List -->
+                <div class="card">
+                    <h3 id="tasks-title">📋 Tasks</h3>
+                    <div class="task-list" id="tasks-container">
+                        <!-- Tasks will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supervisor Dashboard -->
+    <div id="supervisor-dashboard" class="screen">
+        <div class="container">
+            <div class="dashboard-header">
+                <div>
+                    <h1 id="supervisor-welcome">Welcome, Supervisor!</h1>
+                    <p id="supervisor-subtitle">Quality Control & Spot Checks</p>
+                </div>
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Today's Cleaned Rooms -->
+                <div class="card">
+                    <h3 id="cleaned-rooms-today">🧹 Rooms Cleaned Today</h3>
+                    <div id="cleaned-rooms-list">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Spot Check Interface -->
+                <div class="card">
+                    <h3 id="spot-check-title">🔍 Spot Check</h3>
+                    <div id="spot-check-interface">
+                        <p id="spot-check-info">Select a room for today's spot check</p>
+                        <select id="spot-check-room" class="input-field">
+                            <option value="">Choose a room...</option>
+                        </select>
+                        <textarea id="spot-check-notes" class="input-field" placeholder="Spot check notes (required)" rows="4"></textarea>
+                        <button class="btn btn-primary" onclick="performSpotCheck()" id="spot-check-btn">Complete Spot Check</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manager Dashboard -->
+    <div id="manager-dashboard" class="screen">
+        <div class="container">
+            <div class="dashboard-header">
+                <div>
+                    <h1 id="manager-welcome">Welcome, Manager!</h1>
+                    <p id="manager-subtitle">Analytics & Performance Overview</p>
+                </div>
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="dashboard-grid">
+                <div class="metric-card">
+                    <div class="metric-number" id="metric-rooms-cleaned">0</div>
+                    <div id="metric-rooms-label">Rooms Cleaned Today</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number" id="metric-spot-checks">0</div>
+                    <div id="metric-spotchecks-label">Spot Checks Completed</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number" id="metric-active-staff">0</div>
+                    <div id="metric-staff-label">Active Staff</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number" id="metric-efficiency">0%</div>
+                    <div id="metric-efficiency-label">Efficiency Rate</div>
+                </div>
+            </div>
+
+            <!-- Analytics Charts -->
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 id="staff-performance">👥 Staff Performance</h3>
+                    <div id="staff-leaderboard">
+                        <!-- Leaderboard will be generated dynamically -->
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 id="quality-metrics">⭐ Quality Metrics</h3>
+                    <div id="quality-overview">
+                        <!-- Quality metrics will be generated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Run tests when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            // Wait for system initialization
-            RoomForImprovementSystem.events.on('systemInitialized', () => {
-                console.log('System initialized, starting tests...');
-                TestRunner.runAllTests();
+        // ==============================================
+        // CORE SYSTEM DATA & STATE MANAGEMENT
+        // ==============================================
+        
+        let currentUser = null;
+        let currentLanguage = 'en';
+        let currentRoom = null;
+        let roomTasks = [];
+        
+        // Complete rooms data (15 rooms including Toilet)
+        const ROOMS_DATA = [
+            { id: "room_monk", name: { en: "Monk", id: "Monk" }, type: "Monk", active: true },
+            { id: "room_twin_cave", name: { en: "Twin Cave", id: "Twin Cave" }, type: "Twin Cave", active: true },
+            { id: "room_family_cave", name: { en: "Family Cave", id: "Family Cave" }, type: "Family Cave", active: true },
+            { id: "room_flying_boat", name: { en: "Flying Boat", id: "Flying Boat" }, type: "Flying Boat", active: true },
+            { id: "room_baby", name: { en: "Baby", id: "Baby" }, type: "Baby", active: true },
+            { id: "room_tree_house", name: { en: "Tree House", id: "Tree House" }, type: "Tree House", active: true },
+            { id: "room_bird_nest", name: { en: "Bird Nest", id: "Bird Nest" }, type: "Bird Nest", active: true },
+            { id: "room_bola_bola", name: { en: "Bola - Bola", id: "Bola - Bola" }, type: "Bola - Bola", active: true },
+            { id: "room_pillow", name: { en: "Pillow", id: "Pillow" }, type: "Pillow", active: true },
+            { id: "room_passion", name: { en: "Passion", id: "Passion" }, type: "Passion", active: true },
+            { id: "room_bamboo_1", name: { en: "Bamboo 1", id: "Bamboo 1" }, type: "Bamboo 1", active: true },
+            { id: "room_bamboo_2", name: { en: "Bamboo 2", id: "Bamboo 2" }, type: "Bamboo 2", active: true },
+            { id: "room_rabbit_dream", name: { en: "Rabbit Dream", id: "Rabbit Dream" }, type: "Rabbit Dream", active: true },
+            { id: "room_rabbit_color", name: { en: "Rabbit Color", id: "Rabbit Color" }, type: "Rabbit Color", active: true },
+            { id: "room_toilet", name: { en: "Toilet", id: "Toilet" }, type: "Toilet", active: true }
+        ];
+
+        // Sample tasks for Monk room (in production, this would be loaded from the 453 tasks extracted)
+        const COMPLETE_TASKS_DATASET = [
+            // MONK ROOM (29 tasks)
+            {"id":"task_1","roomType":"Monk","roomId":"room_monk","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Scan the entire room upon entry","id":"Periksa seluruh ruangan saat masuk"},"required":true,"order":1},
+            {"id":"task_2","roomType":"Monk","roomId":"room_monk","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Check for unusual or suspicious items","id":"Periksa barang-barang yang tidak biasa atau mencurigakan"},"required":true,"order":2},
+            {"id":"task_3","roomType":"Monk","roomId":"room_monk","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Check for guest belongings left behind","id":"Periksa barang-barang tamu yang tertinggal"},"required":true,"order":3},
+            {"id":"task_4","roomType":"Monk","roomId":"room_monk","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Turn on all the lights","id":"Nyalakan semua lampu"},"required":true,"order":4},
+            {"id":"task_5","roomType":"Monk","roomId":"room_monk","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Check for damaged or misplaced facilities","id":"Periksa fasilitas yang rusak atau tidak pada tempatnya"},"required":true,"order":5},
+            {"id":"task_6","roomType":"Monk","roomId":"room_monk","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Report any damage to reception","id":"Laporkan kerusakan ke resepsionis"},"required":true,"order":6},
+            {"id":"task_7","roomType":"Monk","roomId":"room_monk","section":{"en":"Air Conditioning","id":"Air Conditioning"},"task":{"en":"Ensure ventilation is turned off","id":"Pastikan ventilasi dimatikan"},"required":true,"order":7},
+            {"id":"task_8","roomType":"Monk","roomId":"room_monk","section":{"en":"Ceiling & High Surfaces","id":"Ceiling & High Surfaces"},"task":{"en":"Dust and clean the ceiling","id":"Bersihkan debu dari langit-langit"},"required":true,"order":8},
+            {"id":"task_9","roomType":"Monk","roomId":"room_monk","section":{"en":"Ceiling & High Surfaces","id":"Ceiling & High Surfaces"},"task":{"en":"Remove cobwebs from corners, walls, and ornaments","id":"Singkirkan sarang laba-laba dari sudut, dinding, dan ornamen"},"required":true,"order":9},
+            {"id":"task_10","roomType":"Monk","roomId":"room_monk","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"Remove used bed sheet, pillowcases, and blanket","id":"Lepas seprai bekas, sarung bantal, dan selimut"},"required":true,"order":10},
+            {"id":"task_11","roomType":"Monk","roomId":"room_monk","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"Clean mattress","id":"Bersihkan kasur"},"required":true,"order":11},
+            {"id":"task_12","roomType":"Monk","roomId":"room_monk","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"Clean bed frame, and under the bed","id":"Bersihkan rangka tempat tidur dan bawah tempat tidur"},"required":true,"order":12},
+            {"id":"task_13","roomType":"Monk","roomId":"room_monk","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"Inspect locker under bed; return items to reception if found","id":"Periksa loker di bawah tempat tidur; kembalikan barang ke resepsionis jika ditemukan"},"required":true,"order":13},
+            {"id":"task_14","roomType":"Monk","roomId":"room_monk","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"linens clean","id":"linen bersih"},"required":true,"order":14},
+            {"id":"task_15","roomType":"Monk","roomId":"room_monk","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"linens no stains","id":"linen tidak ternoda"},"required":true,"order":15},
+            {"id":"task_16","roomType":"Monk","roomId":"room_monk","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"linens no odor","id":"linen tidak berbau"},"required":true,"order":16},
+            {"id":"task_17","roomType":"Monk","roomId":"room_monk","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"linens good condition","id":"kondisi linen baik"},"required":true,"order":17},
+            {"id":"task_18","roomType":"Monk","roomId":"room_monk","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"Make the bed with fresh linen","id":"Rapikan tempat tidur dengan linen segar"},"required":true,"order":18},
+            {"id":"task_19","roomType":"Monk","roomId":"room_monk","section":{"en":"Floor & Corners","id":"Floor & Corners"},"task":{"en":"Sweep and mop entire floor","id":"Sapu dan pel seluruh lantai"},"required":true,"order":19},
+            {"id":"task_20","roomType":"Monk","roomId":"room_monk","section":{"en":"Floor & Corners","id":"Floor & Corners"},"task":{"en":"Clean room corners, behind furniture, and under bed","id":"Bersihkan sudut ruangan, belakang furniture, dan bawah tempat tidur"},"required":true,"order":20},
+            {"id":"task_21","roomType":"Monk","roomId":"room_monk","section":{"en":"Entrance Area","id":"Entrance Area"},"task":{"en":"Clean and inspect the doormat","id":"Bersihkan dan periksa keset pintu"},"required":true,"order":21},
+            {"id":"task_22","roomType":"Monk","roomId":"room_monk","section":{"en":"Room Facilities Check","id":"Room Facilities Check"},"task":{"en":"Clean the ventilation blower","id":"Bersihkan kipas ventilasi"},"required":true,"order":22},
+            {"id":"task_23","roomType":"Monk","roomId":"room_monk","section":{"en":"Room Facilities Check","id":"Room Facilities Check"},"task":{"en":"Check bed, AC, lights, and other equipment","id":"Periksa tempat tidur, AC, lampu, dan peralatan lainnya"},"required":true,"order":23},
+            {"id":"task_24","roomType":"Monk","roomId":"room_monk","section":{"en":" Before Leaving","id":" Before Leaving"},"task":{"en":"Turn off all the lightslights","id":"Matikan semua lampu"},"required":true,"order":24},
+            {"id":"task_25","roomType":"Monk","roomId":"room_monk","section":{"en":" Before Leaving","id":" Before Leaving"},"task":{"en":"Turn on ventilation blower","id":"Nyalakan kipas ventilasi"},"required":true,"order":25},
+            {"id":"task_26","roomType":"Monk","roomId":"room_monk","section":{"en":" Before Leaving","id":" Before Leaving"},"task":{"en":"Turn on AC in Twin Room","id":"Nyalakan AC di kamar Twin"},"required":true,"order":26},
+            {"id":"task_27","roomType":"Monk","roomId":"room_monk","section":{"en":"Report","id":"Report"},"task":{"en":"Send message to WhatsApp group","id":"Kirim pesan ke grup WhatsApp"},"required":true,"order":27},
+            {"id":"task_28","roomType":"Monk","roomId":"room_monk","section":{"en":"Report","id":"Report"},"task":{"en":"Report again verbally Issues to reception ","id":"Laporkan lagi secara lisan masalah ke resepsionis"},"required":true,"order":28},
+            {"id":"task_29","roomType":"Monk","roomId":"room_monk","section":{"en":"Report","id":"Report"},"task":{"en":"Erase guest name from whiteboard","id":"Hapus nama tamu dari papan tulis"},"required":true,"order":29},
+
+            // TWIN CAVE ROOM (31 tasks) 
+            {"id":"task_30","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Scan the entire room upon entry","id":"Periksa seluruh ruangan saat masuk"},"required":true,"order":1},
+            {"id":"task_31","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Check for unusual or suspicious items","id":"Periksa barang-barang yang tidak biasa atau mencurigakan"},"required":true,"order":2},
+            {"id":"task_32","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Check for guest belongings left behind","id":"Periksa barang-barang tamu yang tertinggal"},"required":true,"order":3},
+            {"id":"task_33","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Turn on all the lights","id":"Nyalakan semua lampu"},"required":true,"order":4},
+            {"id":"task_34","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Check for damaged or misplaced facilities","id":"Periksa fasilitas yang rusak atau tidak pada tempatnya"},"required":true,"order":5},
+            {"id":"task_35","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Report any damage to reception","id":"Laporkan kerusakan ke resepsionis"},"required":true,"order":6},
+            {"id":"task_36","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Air Conditioning","id":"Air Conditioning"},"task":{"en":"Ensure ventilation is turned off","id":"Pastikan ventilasi dimatikan"},"required":true,"order":7},
+            {"id":"task_37","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Ceiling & High Surfaces","id":"Ceiling & High Surfaces"},"task":{"en":"Dust and clean the ceiling","id":"Bersihkan debu dari langit-langit"},"required":true,"order":8},
+            {"id":"task_38","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Ceiling & High Surfaces","id":"Ceiling & High Surfaces"},"task":{"en":"Remove cobwebs from corners, walls, and ornaments","id":"Singkirkan sarang laba-laba dari sudut, dinding, dan ornamen"},"required":true,"order":9},
+            {"id":"task_39","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"Remove used bed sheet, pillowcases, and blanket","id":"Lepas seprai bekas, sarung bantal, dan selimut"},"required":true,"order":10},
+            {"id":"task_40","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"Clean mattress","id":"Bersihkan kasur"},"required":true,"order":11},
+            {"id":"task_41","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"Clean bed frame, and under the bed","id":"Bersihkan rangka tempat tidur dan bawah tempat tidur"},"required":true,"order":12},
+            {"id":"task_42","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"Inspect locker under bed; return items to reception if found","id":"Periksa loker di bawah tempat tidur; kembalikan barang ke resepsionis jika ditemukan"},"required":true,"order":13},
+            {"id":"task_43","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"linens clean","id":"linen bersih"},"required":true,"order":14},
+            {"id":"task_44","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"linens no stains","id":"linen tidak ternoda"},"required":true,"order":15},
+            {"id":"task_45","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"linens no odor","id":"linen tidak berbau"},"required":true,"order":16},
+            {"id":"task_46","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"linens good condition","id":"kondisi linen baik"},"required":true,"order":17},
+            {"id":"task_47","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Beds & Bedding","id":"Beds & Bedding"},"task":{"en":"Make the bed with fresh linen","id":"Rapikan tempat tidur dengan linen segar"},"required":true,"order":18},
+            {"id":"task_48","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Floor & Corners","id":"Floor & Corners"},"task":{"en":"Sweep and mop entire floor","id":"Sapu dan pel seluruh lantai"},"required":true,"order":19},
+            {"id":"task_49","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Floor & Corners","id":"Floor & Corners"},"task":{"en":"Clean room corners, behind furniture, and under bed","id":"Bersihkan sudut ruangan, belakang furniture, dan bawah tempat tidur"},"required":true,"order":20},
+            {"id":"task_50","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Entrance Area","id":"Entrance Area"},"task":{"en":"Clean and inspect the doormat","id":"Bersihkan dan periksa keset pintu"},"required":true,"order":21},
+            {"id":"task_51","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Room Facilities Check","id":"Room Facilities Check"},"task":{"en":"Clean the ventilation blower","id":"Bersihkan kipas ventilasi"},"required":true,"order":22},
+            {"id":"task_52","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Room Facilities Check","id":"Room Facilities Check"},"task":{"en":"Check bed, AC, lights, and other equipment","id":"Periksa tempat tidur, AC, lampu, dan peralatan lainnya"},"required":true,"order":23},
+            {"id":"task_53","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Room Facilities Check","id":"Room Facilities Check"},"task":{"en":"Check both beds in twin room","id":"Periksa kedua tempat tidur di kamar twin"},"required":true,"order":24},
+            {"id":"task_54","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Room Facilities Check","id":"Room Facilities Check"},"task":{"en":"Check lockers for both beds","id":"Periksa loker untuk kedua tempat tidur"},"required":true,"order":25},
+            {"id":"task_55","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":" Before Leaving","id":" Before Leaving"},"task":{"en":"Turn off all the lights","id":"Matikan semua lampu"},"required":true,"order":26},
+            {"id":"task_56","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":" Before Leaving","id":" Before Leaving"},"task":{"en":"Turn on ventilation blower","id":"Nyalakan kipas ventilasi"},"required":true,"order":27},
+            {"id":"task_57","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":" Before Leaving","id":" Before Leaving"},"task":{"en":"Turn on AC in Twin Room","id":"Nyalakan AC di kamar Twin"},"required":true,"order":28},
+            {"id":"task_58","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Report","id":"Report"},"task":{"en":"Send message to WhatsApp group","id":"Kirim pesan ke grup WhatsApp"},"required":true,"order":29},
+            {"id":"task_59","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Report","id":"Report"},"task":{"en":"Report again verbally Issues to reception ","id":"Laporkan lagi secara lisan masalah ke resepsionis"},"required":true,"order":30},
+            {"id":"task_60","roomType":"Twin Cave","roomId":"room_twin_cave","section":{"en":"Report","id":"Report"},"task":{"en":"Erase guest name from whiteboard","id":"Hapus nama tamu dari papan tulis"},"required":true,"order":31},
+
+            // TOILET ROOM (29 tasks - Indonesian only)
+            {"id":"task_425","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Periksa seluruh ruangan saat masuk","id":"Periksa seluruh ruangan saat masuk"},"required":true,"order":1},
+            {"id":"task_426","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Periksa barang-barang yang tidak biasa atau mencurigakan","id":"Periksa barang-barang yang tidak biasa atau mencurigakan"},"required":true,"order":2},
+            {"id":"task_427","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Periksa barang-barang tamu yang tertinggal","id":"Periksa barang-barang tamu yang tertinggal"},"required":true,"order":3},
+            {"id":"task_428","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Nyalakan semua lampu","id":"Nyalakan semua lampu"},"required":true,"order":4},
+            {"id":"task_429","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Periksa fasilitas yang rusak atau tidak pada tempatnya","id":"Periksa fasilitas yang rusak atau tidak pada tempatnya"},"required":true,"order":5},
+            {"id":"task_430","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Initial Room Entry","id":"Initial Room Entry"},"task":{"en":"Laporkan kerusakan ke resepsionis","id":"Laporkan kerusakan ke resepsionis"},"required":true,"order":6},
+            {"id":"task_431","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Air Conditioning","id":"Air Conditioning"},"task":{"en":"Pastikan ventilasi dimatikan","id":"Pastikan ventilasi dimatikan"},"required":true,"order":7},
+            {"id":"task_432","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Ceiling & High Surfaces","id":"Ceiling & High Surfaces"},"task":{"en":"Bersihkan debu dari langit-langit","id":"Bersihkan debu dari langit-langit"},"required":true,"order":8},
+            {"id":"task_433","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Ceiling & High Surfaces","id":"Ceiling & High Surfaces"},"task":{"en":"Singkirkan sarang laba-laba dari sudut, dinding, dan ornamen","id":"Singkirkan sarang laba-laba dari sudut, dinding, dan ornamen"},"required":true,"order":9},
+            {"id":"task_434","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Toilet & Sink","id":"Toilet & Sink"},"task":{"en":"Sikat dan bersihkan toilet dengan disinfektan","id":"Sikat dan bersihkan toilet dengan disinfektan"},"required":true,"order":10},
+            {"id":"task_435","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Toilet & Sink","id":"Toilet & Sink"},"task":{"en":"Bersihkan wastafel dengan disinfektan","id":"Bersihkan wastafel dengan disinfektan"},"required":true,"order":11},
+            {"id":"task_436","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Toilet & Sink","id":"Toilet & Sink"},"task":{"en":"Bersihkan cermin","id":"Bersihkan cermin"},"required":true,"order":12},
+            {"id":"task_437","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Toilet & Sink","id":"Toilet & Sink"},"task":{"en":"Isi sabun dan tissue toilet","id":"Isi sabun dan tissue toilet"},"required":true,"order":13},
+            {"id":"task_438","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Toilet & Sink","id":"Toilet & Sink"},"task":{"en":"Kosongkan tempat sampah","id":"Kosongkan tempat sampah"},"required":true,"order":14},
+            {"id":"task_439","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Toilet & Sink","id":"Toilet & Sink"},"task":{"en":"Ganti tempat sampah dengan yang bersih","id":"Ganti tempat sampah dengan yang bersih"},"required":true,"order":15},
+            {"id":"task_440","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Floor & Corners","id":"Floor & Corners"},"task":{"en":"Sapu dan pel seluruh lantai dengan disinfektan","id":"Sapu dan pel seluruh lantai dengan disinfektan"},"required":true,"order":16},
+            {"id":"task_441","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Floor & Corners","id":"Floor & Corners"},"task":{"en":"Bersihkan sudut ruangan dan belakang toilet","id":"Bersihkan sudut ruangan dan belakang toilet"},"required":true,"order":17},
+            {"id":"task_442","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Entrance Area","id":"Entrance Area"},"task":{"en":"Bersihkan dan periksa keset pintu","id":"Bersihkan dan periksa keset pintu"},"required":true,"order":18},
+            {"id":"task_443","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Room Facilities Check","id":"Room Facilities Check"},"task":{"en":"Bersihkan kipas ventilasi","id":"Bersihkan kipas ventilasi"},"required":true,"order":19},
+            {"id":"task_444","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Room Facilities Check","id":"Room Facilities Check"},"task":{"en":"Periksa semua fasilitas toilet","id":"Periksa semua fasilitas toilet"},"required":true,"order":20},
+            {"id":"task_445","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Room Facilities Check","id":"Room Facilities Check"},"task":{"en":"Pastikan air mengalir dengan baik","id":"Pastikan air mengalir dengan baik"},"required":true,"order":21},
+            {"id":"task_446","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Room Facilities Check","id":"Room Facilities Check"},"task":{"en":"Periksa kebersihan dan fungsi semua perlengkapan","id":"Periksa kebersihan dan fungsi semua perlengkapan"},"required":true,"order":22},
+            {"id":"task_447","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Room Facilities Check","id":"Room Facilities Check"},"task":{"en":"Semprot disinfektan pada semua permukaan","id":"Semprot disinfektan pada semua permukaan"},"required":true,"order":23},
+            {"id":"task_448","roomType":"Toilet","roomId":"room_toilet","section":{"en":" Before Leaving","id":" Before Leaving"},"task":{"en":"Matikan semua lampu","id":"Matikan semua lampu"},"required":true,"order":24},
+            {"id":"task_449","roomType":"Toilet","roomId":"room_toilet","section":{"en":" Before Leaving","id":" Before Leaving"},"task":{"en":"Nyalakan kipas ventilasi","id":"Nyalakan kipas ventilasi"},"required":true,"order":25},
+            {"id":"task_450","roomType":"Toilet","roomId":"room_toilet","section":{"en":" Before Leaving","id":" Before Leaving"},"task":{"en":"Pastikan pintu terkunci dengan benar","id":"Pastikan pintu terkunci dengan benar"},"required":true,"order":26},
+            {"id":"task_451","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Report","id":"Report"},"task":{"en":"Kirim pesan ke grup WhatsApp","id":"Kirim pesan ke grup WhatsApp"},"required":true,"order":27},
+            {"id":"task_452","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Report","id":"Report"},"task":{"en":"Laporkan lagi secara lisan masalah ke resepsionis","id":"Laporkan lagi secara lisan masalah ke resepsionis"},"required":true,"order":28},
+            {"id":"task_453","roomType":"Toilet","roomId":"room_toilet","section":{"en":"Report","id":"Report"},"task":{"en":"Hapus nama tamu dari papan tulis","id":"Hapus nama tamu dari papan tulis"},"required":true,"order":29}
+        ];
+
+        // Usage: Replace the SAMPLE_TASKS constant in your HTML file with COMPLETE_TASKS_DATASET
+        // Then update the initialization:
+        // localStorage.setItem('rabbit_tasks', JSON.stringify(COMPLETE_TASKS_DATASET));
+
+        // Department modules for future expansion
+        const DEPARTMENTS = [
+            { id: 'housekeeping', name: { en: 'Housekeeping', id: 'Housekeeping' }, implemented: true },
+            { id: 'reception', name: { en: 'Reception', id: 'Resepsionis' }, implemented: false },
+            { id: 'laundry', name: { en: 'Laundry', id: 'Laundry' }, implemented: false },
+            { id: 'maintenance', name: { en: 'Maintenance', id: 'Pemeliharaan' }, implemented: false },
+            { id: 'kitchen', name: { en: 'Kitchen', id: 'Dapur' }, implemented: false },
+            { id: 'security', name: { en: 'Security', id: 'Keamanan' }, implemented: false },
+            { id: 'crm', name: { en: 'Guest CRM', id: 'CRM Tamu' }, implemented: false },
+            { id: 'equipment', name: { en: 'Equipment Hire', id: 'Sewa Peralatan' }, implemented: false },
+            { id: 'trips', name: { en: 'Trip Bookings', id: 'Booking Trip' }, implemented: false },
+            { id: 'ai_manager', name: { en: 'Virtual Manager (AI)', id: 'Manajer Virtual (AI)' }, implemented: false }
+        ];
+
+        // Translations
+        const TRANSLATIONS = {
+            en: {
+                app_title: "🐰 Rabbit Hostel System",
+                login_subtitle: "Staff Login",
+                login_text: "Login",
+                demo_info: "Demo: Use 'owner1/admin123' for setup",
+                welcome_owner: "Welcome, Owner!",
+                welcome_staff: "Welcome, Staff!",
+                welcome_supervisor: "Welcome, Supervisor!",
+                welcome_manager: "Welcome, Manager!",
+                logout: "Logout",
+                quick_actions: "⚡ Quick Actions",
+                system_status: "📊 System Status",
+                daily_progress: "📈 Daily Progress",
+                assigned_rooms: "🏠 Your Assigned Rooms",
+                task_progress: "✅ Task Progress",
+                tasks_title: "📋 Tasks",
+                start_cleaning: "Start Cleaning",
+                complete_cleaning: "Complete Cleaning",
+                back: "Back",
+                departments_title: "🏨 Department Modules",
+                coming_soon: "Coming Soon",
+                room_cleaned: "🎉 Room Cleaned Successfully!",
+                error_occurred: "An error occurred. Please try again.",
+                spot_check_title: "🔍 Spot Check",
+                cleaned_rooms_today: "🧹 Rooms Cleaned Today",
+                staff_performance: "👥 Staff Performance",
+                quality_metrics: "⭐ Quality Metrics"
+            },
+            id: {
+                app_title: "🐰 Sistem Hostel Rabbit",
+                login_subtitle: "Login Staff",
+                login_text: "Masuk",
+                demo_info: "Demo: Gunakan 'owner1/admin123' untuk setup",
+                welcome_owner: "Selamat datang, Pemilik!",
+                welcome_staff: "Selamat datang, Staff!",
+                welcome_supervisor: "Selamat datang, Supervisor!",
+                welcome_manager: "Selamat datang, Manajer!",
+                logout: "Keluar",
+                quick_actions: "⚡ Aksi Cepat",
+                system_status: "📊 Status Sistem",
+                daily_progress: "📈 Progress Harian",
+                assigned_rooms: "🏠 Kamar yang Ditugaskan",
+                task_progress: "✅ Progress Tugas",
+                tasks_title: "📋 Tugas-tugas",
+                start_cleaning: "Mulai Bersih-bersih",
+                complete_cleaning: "Selesai Bersih-bersih",
+                back: "Kembali",
+                departments_title: "🏨 Modul Departemen",
+                coming_soon: "Segera Hadir",
+                room_cleaned: "🎉 Kamar Berhasil Dibersihkan!",
+                error_occurred: "Terjadi kesalahan. Silakan coba lagi.",
+                spot_check_title: "🔍 Pemeriksaan Spot",
+                cleaned_rooms_today: "🧹 Kamar Dibersihkan Hari Ini",
+                staff_performance: "👥 Performa Staff",
+                quality_metrics: "⭐ Metrik Kualitas"
+            }
+        };
+
+        // ==============================================
+        // INITIALIZATION & SETUP
+        // ==============================================
+
+        function initializeSystem() {
+            // Initialize localStorage with default data if not exists
+            if (!localStorage.getItem('rabbit_users')) {
+                initializeDefaultData();
+            }
+
+            // Check if system needs first-time setup
+            const users = JSON.parse(localStorage.getItem('rabbit_users') || '[]');
+            const hasOwner = users.some(user => user.role === 'owner');
+
+            if (!hasOwner) {
+                showScreen('setup-screen');
+            } else {
+                showScreen('login-screen');
+            }
+
+            // Load current language
+            const savedLanguage = localStorage.getItem('rabbit_language') || 'en';
+            switchLanguage(savedLanguage);
+
+            // Load departments
+            loadDepartments();
+        }
+
+        function initializeDefaultData() {
+            // Initialize default rooms
+            localStorage.setItem('rabbit_rooms', JSON.stringify(ROOMS_DATA));
+            
+            // Initialize sample tasks (in production, load all 453 tasks)
+            localStorage.setItem('rabbit_tasks', JSON.stringify(COMPLETE_TASKS_DATASET));
+            
+            // Initialize empty users array
+            localStorage.setItem('rabbit_users', JSON.stringify([]));
+            
+            // Initialize empty records
+            localStorage.setItem('rabbit_records', JSON.stringify([]));
+            localStorage.setItem('rabbit_spot_checks', JSON.stringify([]));
+            
+            // Initialize system settings
+            const settings = {
+                hostelName: "Rabbit Dreams Hostel",
+                maxRoomsPerStaff: 5,
+                defaultLanguage: "en",
+                setupComplete: false
+            };
+            localStorage.setItem('rabbit_settings', JSON.stringify(settings));
+        }
+
+        // ==============================================
+        // AUTHENTICATION SYSTEM
+        // ==============================================
+
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                showError('Please enter both username and password');
+                return;
+            }
+
+            showLoading('login-btn', true);
+
+            setTimeout(() => {
+                try {
+                    const users = JSON.parse(localStorage.getItem('rabbit_users') || '[]');
+                    const user = users.find(u => u.username === username && u.password === password);
+
+                    if (user) {
+                        currentUser = user;
+                        localStorage.setItem('rabbit_current_user', JSON.stringify(user));
+                        
+                        // Route to appropriate dashboard
+                        switch(user.role) {
+                            case 'owner':
+                                showScreen('owner-dashboard');
+                                loadOwnerDashboard();
+                                break;
+                            case 'manager':
+                                showScreen('manager-dashboard');
+                                loadManagerDashboard();
+                                break;
+                            case 'supervisor':
+                                showScreen('supervisor-dashboard');
+                                loadSupervisorDashboard();
+                                break;
+                            case 'staff':
+                                showScreen('staff-dashboard');
+                                loadStaffDashboard();
+                                break;
+                            default:
+                                showError('Invalid user role');
+                        }
+                        
+                        // Clear login form
+                        document.getElementById('username').value = '';
+                        document.getElementById('password').value = '';
+                    } else {
+                        showError('Invalid username or password');
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    showError('Login failed. Please try again.');
+                }
+
+                showLoading('login-btn', false);
+            }, 500);
+        }
+
+        function logout() {
+            currentUser = null;
+            currentRoom = null;
+            localStorage.removeItem('rabbit_current_user');
+            showScreen('login-screen');
+            clearError();
+        }
+
+        function completeSetup() {
+            const username = document.getElementById('owner-username').value.trim();
+            const password = document.getElementById('owner-password').value.trim();
+            const hostelName = document.getElementById('hostel-name').value.trim();
+            const defaultLang = document.getElementById('default-language').value;
+
+            if (!username || !password) {
+                showError('Please fill in all required fields');
+                return;
+            }
+
+            try {
+                // Create owner user
+                const ownerUser = {
+                    id: 'user_owner_1',
+                    username: username,
+                    password: password,
+                    name: 'System Owner',
+                    role: 'owner',
+                    active: true,
+                    createdAt: new Date().toISOString()
+                };
+
+                // Add default users (15 staff + 10 supervisors + 1 manager)
+                const users = [ownerUser];
+                
+                // Add 15 staff members
+                for (let i = 1; i <= 15; i++) {
+                    users.push({
+                        id: `user_staff_${i}`,
+                        username: `staff${i}`,
+                        password: 'staff123',
+                        name: `Staff ${i}`,
+                        role: 'staff',
+                        active: true,
+                        assignedRooms: [],
+                        maxRoomsPerDay: 5
+                    });
+                }
+
+                // Add 10 supervisors
+                for (let i = 1; i <= 10; i++) {
+                    users.push({
+                        id: `user_supervisor_${i}`,
+                        username: `supervisor${i}`,
+                        password: 'super123',
+                        name: `Supervisor ${i}`,
+                        role: 'supervisor',
+                        active: true
+                    });
+                }
+
+                // Add 1 manager
+                users.push({
+                    id: 'user_manager_1',
+                    username: 'manager1',
+                    password: 'manager123',
+                    name: 'System Manager',
+                    role: 'manager',
+                    active: true
+                });
+
+                localStorage.setItem('rabbit_users', JSON.stringify(users));
+
+                // Update settings
+                const settings = {
+                    hostelName: hostelName,
+                    maxRoomsPerStaff: 5,
+                    defaultLanguage: defaultLang,
+                    setupComplete: true
+                };
+                localStorage.setItem('rabbit_settings', JSON.stringify(settings));
+
+                // Auto-assign rooms to staff (5 rooms each for first 3 staff)
+                assignRoomsToStaff();
+
+                // Auto-login as owner
+                currentUser = ownerUser;
+                localStorage.setItem('rabbit_current_user', JSON.stringify(ownerUser));
+                
+                showScreen('owner-dashboard');
+                loadOwnerDashboard();
+                
+                showSuccess('System setup completed successfully!');
+            } catch (error) {
+                console.error('Setup error:', error);
+                showError('Setup failed. Please try again.');
+            }
+        }
+
+        function assignRoomsToStaff() {
+            // Auto-assign first 15 rooms to first 3 staff members (5 each)
+            const users = JSON.parse(localStorage.getItem('rabbit_users'));
+            const rooms = JSON.parse(localStorage.getItem('rabbit_rooms'));
+            
+            const staffUsers = users.filter(u => u.role === 'staff').slice(0, 3);
+            
+            staffUsers.forEach((staff, staffIndex) => {
+                const startRoom = staffIndex * 5;
+                staff.assignedRooms = rooms.slice(startRoom, startRoom + 5).map(room => room.id);
             });
+
+            localStorage.setItem('rabbit_users', JSON.stringify(users));
+        }
+
+        // ==============================================
+        // DASHBOARD LOADERS
+        // ==============================================
+
+        function loadOwnerDashboard() {
+            updateSystemStats();
+            updateTranslations();
+        }
+
+        function loadStaffDashboard() {
+            if (!currentUser || currentUser.role !== 'staff') return;
+
+            const assignedRooms = currentUser.assignedRooms || [];
+            const rooms = JSON.parse(localStorage.getItem('rabbit_rooms'));
+            const records = JSON.parse(localStorage.getItem('rabbit_records') || '[]');
+            const today = new Date().toDateString();
+
+            // Filter completed rooms for today
+            const completedToday = records.filter(r => 
+                r.staffId === currentUser.id && 
+                r.completed && 
+                new Date(r.completedAt).toDateString() === today
+            );
+
+            // Update progress
+            const completed = completedToday.length;
+            const assigned = assignedRooms.length;
+            const progressPercent = assigned > 0 ? Math.round((completed / assigned) * 100) : 0;
+
+            document.getElementById('rooms-completed').textContent = completed;
+            document.getElementById('rooms-assigned').textContent = assigned;
+            document.getElementById('staff-progress-bar').style.width = progressPercent + '%';
+            document.getElementById('progress-text').textContent = progressPercent + '% Complete';
+
+            // Load assigned rooms
+            loadStaffRoomsList();
+            updateTranslations();
+        }
+
+        function loadStaffRoomsList() {
+            const container = document.getElementById('staff-rooms-list');
+            const assignedRooms = currentUser.assignedRooms || [];
+            const rooms = JSON.parse(localStorage.getItem('rabbit_rooms'));
+            const records = JSON.parse(localStorage.getItem('rabbit_records') || '[]');
+            const today = new Date().toDateString();
+
+            container.innerHTML = '';
+
+            if (assignedRooms.length === 0) {
+                container.innerHTML = '<p>No rooms assigned. Please contact your supervisor.</p>';
+                return;
+            }
+
+            assignedRooms.forEach(roomId => {
+                const room = rooms.find(r => r.id === roomId);
+                if (!room) return;
+
+                // Check if room is completed today
+                const completedToday = records.some(r => 
+                    r.roomId === roomId && 
+                    r.staffId === currentUser.id && 
+                    r.completed && 
+                    new Date(r.completedAt).toDateString() === today
+                );
+
+                const roomCard = document.createElement('div');
+                roomCard.className = 'card';
+                roomCard.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h4>${room.name[currentLanguage]}</h4>
+                            <p>${completedToday ? '✅ Completed Today' : '⏳ Pending'}</p>
+                        </div>
+                        <button class="btn ${completedToday ? 'btn-success' : 'btn-primary'}" 
+                                onclick="openRoomCleaning('${roomId}')"
+                                ${completedToday ? 'disabled' : ''}>
+                            ${completedToday ? 'Completed' : 'Clean Room'}
+                        </button>
+                    </div>
+                `;
+
+                container.appendChild(roomCard);
+            });
+        }
+
+        function loadSupervisorDashboard() {
+            loadCleanedRoomsToday();
+            loadSpotCheckInterface();
+            updateTranslations();
+        }
+
+        function loadManagerDashboard() {
+            loadManagerAnalytics();
+            updateTranslations();
+        }
+
+        // ==============================================
+        // ROOM CLEANING SYSTEM
+        // ==============================================
+
+        function openRoomCleaning(roomId) {
+            const rooms = JSON.parse(localStorage.getItem('rabbit_rooms'));
+            const room = rooms.find(r => r.id === roomId);
+            
+            if (!room) {
+                showError('Room not found');
+                return;
+            }
+
+            currentRoom = room;
+            loadRoomTasks(room.type);
+            showScreen('room-cleaning');
+            
+            // Update room name
+            document.getElementById('cleaning-room-name').textContent = `Room: ${room.name[currentLanguage]}`;
+            document.getElementById('cleaning-status').textContent = 'Ready to start';
+            
+            // Reset UI
+            document.getElementById('start-cleaning-btn').style.display = 'block';
+            document.getElementById('complete-cleaning-btn').style.display = 'none';
+            
+            updateTranslations();
+        }
+
+        function loadRoomTasks(roomType) {
+            const tasks = JSON.parse(localStorage.getItem('rabbit_tasks'));
+            roomTasks = tasks.filter(task => task.roomType === roomType);
+            
+            renderTasksList();
+            updateTaskProgress();
+        }
+
+        function renderTasksList() {
+            const container = document.getElementById('tasks-container');
+            container.innerHTML = '';
+
+            roomTasks.forEach((task, index) => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task-item';
+                taskElement.innerHTML = `
+                    <input type="checkbox" 
+                           class="task-checkbox" 
+                           id="task-${index}"
+                           onchange="updateTaskProgress()"
+                           disabled>
+                    <div>
+                        <strong>[${task.section[currentLanguage]}]</strong><br>
+                        ${task.task[currentLanguage]}
+                    </div>
+                `;
+                container.appendChild(taskElement);
+            });
+        }
+
+        function startCleaning() {
+            if (!currentRoom || !currentUser) return;
+
+            // Create cleaning record
+            const record = {
+                id: `record_${Date.now()}`,
+                roomId: currentRoom.id,
+                roomName: currentRoom.name[currentLanguage],
+                staffId: currentUser.id,
+                staffName: currentUser.name,
+                startedAt: new Date().toISOString(),
+                tasks: roomTasks.map(task => ({
+                    taskId: task.id,
+                    completed: false,
+                    completedAt: null
+                })),
+                completed: false,
+                completedAt: null
+            };
+
+            // Save record
+            const records = JSON.parse(localStorage.getItem('rabbit_records') || '[]');
+            records.push(record);
+            localStorage.setItem('rabbit_records', JSON.stringify(records));
+
+            // Enable task checkboxes
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            checkboxes.forEach(checkbox => checkbox.disabled = false);
+
+            // Update UI
+            document.getElementById('start-cleaning-btn').style.display = 'none';
+            document.getElementById('cleaning-status').textContent = 'Cleaning in progress...';
+            
+            updateTaskProgress();
+        }
+
+        function updateTaskProgress() {
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            const totalTasks = checkboxes.length;
+            const completedTasks = Array.from(checkboxes).filter(cb => cb.checked).length;
+            
+            const progressPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+            
+            document.getElementById('task-progress-bar').style.width = progressPercent + '%';
+            document.getElementById('task-progress-text').textContent = `${completedTasks}/${totalTasks} tasks completed`;
+
+            // Show complete button when all tasks are done
+            if (completedTasks === totalTasks && totalTasks > 0) {
+                document.getElementById('complete-cleaning-btn').style.display = 'block';
+            } else {
+                document.getElementById('complete-cleaning-btn').style.display = 'none';
+            }
+
+            // Update task items visual state
+            checkboxes.forEach((checkbox, index) => {
+                const taskItem = checkbox.closest('.task-item');
+                if (checkbox.checked) {
+                    taskItem.classList.add('completed');
+                } else {
+                    taskItem.classList.remove('completed');
+                }
+            });
+        }
+
+        function completeCleaning() {
+            if (!currentRoom || !currentUser) return;
+
+            // Update the record
+            const records = JSON.parse(localStorage.getItem('rabbit_records') || '[]');
+            const today = new Date().toDateString();
+            const recordIndex = records.findIndex(r => 
+                r.roomId === currentRoom.id && 
+                r.staffId === currentUser.id && 
+                !r.completed &&
+                new Date(r.startedAt).toDateString() === today
+            );
+
+            if (recordIndex >= 0) {
+                records[recordIndex].completed = true;
+                records[recordIndex].completedAt = new Date().toISOString();
+                
+                // Update task completion status
+                const checkboxes = document.querySelectorAll('.task-checkbox');
+                checkboxes.forEach((checkbox, index) => {
+                    if (records[recordIndex].tasks[index]) {
+                        records[recordIndex].tasks[index].completed = checkbox.checked;
+                        if (checkbox.checked) {
+                            records[recordIndex].tasks[index].completedAt = new Date().toISOString();
+                        }
+                    }
+                });
+
+                localStorage.setItem('rabbit_records', JSON.stringify(records));
+
+                // Show success animation
+                showRoomCompletedAnimation();
+
+                setTimeout(() => {
+                    goBack();
+                }, 2000);
+            }
+        }
+
+        function showRoomCompletedAnimation() {
+            const container = document.querySelector('#room-cleaning .container');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 50px; animation: flashGreen 2s ease;">
+                    <h1 style="font-size: 3em; margin-bottom: 20px;">🎉</h1>
+                    <h2>${TRANSLATIONS[currentLanguage].room_cleaned}</h2>
+                    <p>Returning to dashboard...</p>
+                </div>
+            `;
+        }
+
+        // ==============================================
+        // SUPERVISOR FUNCTIONALITY
+        // ==============================================
+
+        function loadCleanedRoomsToday() {
+            const records = JSON.parse(localStorage.getItem('rabbit_records') || '[]');
+            const today = new Date().toDateString();
+            const cleanedToday = records.filter(r => 
+                r.completed && 
+                new Date(r.completedAt).toDateString() === today
+            );
+
+            const container = document.getElementById('cleaned-rooms-list');
+            container.innerHTML = '';
+
+            if (cleanedToday.length === 0) {
+                container.innerHTML = '<p>No rooms cleaned today yet.</p>';
+                return;
+            }
+
+            cleanedToday.forEach(record => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h4>${record.roomName}</h4>
+                    <p>Cleaned by: ${record.staffName}</p>
+                    <p>Completed: ${new Date(record.completedAt).toLocaleTimeString()}</p>
+                `;
+                container.appendChild(card);
+            });
+
+            // Update spot check dropdown
+            const spotCheckSelect = document.getElementById('spot-check-room');
+            spotCheckSelect.innerHTML = '<option value="">Choose a room...</option>';
+            
+            cleanedToday.forEach(record => {
+                const option = document.createElement('option');
+                option.value = record.id;
+                option.textContent = `${record.roomName} (by ${record.staffName})`;
+                spotCheckSelect.appendChild(option);
+            });
+        }
+
+        function loadSpotCheckInterface() {
+            const spotChecks = JSON.parse(localStorage.getItem('rabbit_spot_checks') || '[]');
+            const today = new Date().toDateString();
+            const todaySpotChecks = spotChecks.filter(sc => 
+                sc.supervisorId === currentUser.id &&
+                new Date(sc.completedAt).toDateString() === today
+            );
+
+            if (todaySpotChecks.length > 0) {
+                document.getElementById('spot-check-interface').innerHTML = `
+                    <p>✅ You have completed ${todaySpotChecks.length} spot check(s) today.</p>
+                    <div style="margin-top: 20px;">
+                        ${todaySpotChecks.map(sc => `
+                            <div class="card">
+                                <h4>${sc.roomName}</h4>
+                                <p><strong>Notes:</strong> ${sc.notes}</p>
+                                <p><small>Completed: ${new Date(sc.completedAt).toLocaleTimeString()}</small></p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        function performSpotCheck() {
+            const roomRecordId = document.getElementById('spot-check-room').value;
+            const notes = document.getElementById('spot-check-notes').value.trim();
+
+            if (!roomRecordId) {
+                showError('Please select a room for spot check');
+                return;
+            }
+
+            if (!notes) {
+                showError('Please enter spot check notes');
+                return;
+            }
+
+            // Find the room record
+            const records = JSON.parse(localStorage.getItem('rabbit_records') || '[]');
+            const record = records.find(r => r.id === roomRecordId);
+
+            if (!record) {
+                showError('Room record not found');
+                return;
+            }
+
+            // Create spot check record
+            const spotCheck = {
+                id: `spotcheck_${Date.now()}`,
+                recordId: roomRecordId,
+                roomId: record.roomId,
+                roomName: record.roomName,
+                staffId: record.staffId,
+                staffName: record.staffName,
+                supervisorId: currentUser.id,
+                supervisorName: currentUser.name,
+                notes: notes,
+                completedAt: new Date().toISOString()
+            };
+
+            // Save spot check
+            const spotChecks = JSON.parse(localStorage.getItem('rabbit_spot_checks') || '[]');
+            spotChecks.push(spotCheck);
+            localStorage.setItem('rabbit_spot_checks', JSON.stringify(spotChecks));
+
+            // Clear form and reload interface
+            document.getElementById('spot-check-room').value = '';
+            document.getElementById('spot-check-notes').value = '';
+            
+            showSuccess('Spot check completed successfully!');
+            loadSpotCheckInterface();
+        }
+
+        // ==============================================
+        // MANAGER ANALYTICS
+        // ==============================================
+
+        function loadManagerAnalytics() {
+            const records = JSON.parse(localStorage.getItem('rabbit_records') || '[]');
+            const spotChecks = JSON.parse(localStorage.getItem('rabbit_spot_checks') || '[]');
+            const users = JSON.parse(localStorage.getItem('rabbit_users') || '[]');
+            const today = new Date().toDateString();
+
+            // Calculate metrics
+            const todayRecords = records.filter(r => 
+                r.completed && 
+                new Date(r.completedAt).toDateString() === today
+            );
+            const todaySpotChecks = spotChecks.filter(sc => 
+                new Date(sc.completedAt).toDateString() === today
+            );
+            const activeStaff = users.filter(u => u.role === 'staff' && u.active).length;
+            const totalRooms = JSON.parse(localStorage.getItem('rabbit_rooms')).length;
+            const efficiency = totalRooms > 0 ? Math.round((todayRecords.length / totalRooms) * 100) : 0;
+
+            // Update metric cards
+            document.getElementById('metric-rooms-cleaned').textContent = todayRecords.length;
+            document.getElementById('metric-spot-checks').textContent = todaySpotChecks.length;
+            document.getElementById('metric-active-staff').textContent = activeStaff;
+            document.getElementById('metric-efficiency').textContent = efficiency + '%';
+
+            // Load staff performance leaderboard
+            loadStaffLeaderboard(todayRecords);
+
+            // Load quality metrics
+            loadQualityMetrics(todaySpotChecks);
+        }
+
+        function loadStaffLeaderboard(todayRecords) {
+            const users = JSON.parse(localStorage.getItem('rabbit_users') || '[]');
+            const staff = users.filter(u => u.role === 'staff');
+
+            // Calculate performance for each staff
+            const performance = staff.map(s => {
+                const staffRecords = todayRecords.filter(r => r.staffId === s.id);
+                return {
+                    name: s.name,
+                    roomsCleaned: staffRecords.length,
+                    averageTime: staffRecords.length > 0 ? 
+                        Math.round(staffRecords.reduce((sum, r) => {
+                            const start = new Date(r.startedAt);
+                            const end = new Date(r.completedAt);
+                            return sum + (end - start) / (1000 * 60); // minutes
+                        }, 0) / staffRecords.length) : 0
+                };
+            }).sort((a, b) => b.roomsCleaned - a.roomsCleaned);
+
+            const container = document.getElementById('staff-leaderboard');
+            container.innerHTML = '';
+
+            if (performance.length === 0 || performance.every(p => p.roomsCleaned === 0)) {
+                container.innerHTML = '<p>No cleaning records for today yet.</p>';
+                return;
+            }
+
+            performance.forEach((staff, index) => {
+                if (staff.roomsCleaned > 0) {
+                    const card = document.createElement('div');
+                    card.className = 'task-item';
+                    card.innerHTML = `
+                        <div style="font-weight: bold; margin-right: 10px;">#${index + 1}</div>
+                        <div>
+                            <strong>${staff.name}</strong><br>
+                            <small>${staff.roomsCleaned} rooms • Avg: ${staff.averageTime} min</small>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            });
+        }
+
+        function loadQualityMetrics(todaySpotChecks) {
+            const container = document.getElementById('quality-overview');
+            
+            if (todaySpotChecks.length === 0) {
+                container.innerHTML = '<p>No spot checks completed today yet.</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="task-item">
+                    <div>
+                        <strong>Total Spot Checks: ${todaySpotChecks.length}</strong><br>
+                        <small>Quality assurance activities completed today</small>
+                    </div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <h4>Recent Spot Checks:</h4>
+                    ${todaySpotChecks.slice(-3).map(sc => `
+                        <div class="task-item" style="margin: 5px 0;">
+                            <div>
+                                <strong>${sc.roomName}</strong> by ${sc.supervisorName}<br>
+                                <small>${sc.notes}</small>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // ==============================================
+        // SYSTEM UTILITIES
+        // ==============================================
+
+        function updateSystemStats() {
+            const records = JSON.parse(localStorage.getItem('rabbit_records') || '[]');
+            const spotChecks = JSON.parse(localStorage.getItem('rabbit_spot_checks') || '[]');
+            const users = JSON.parse(localStorage.getItem('rabbit_users') || '[]');
+            const rooms = JSON.parse(localStorage.getItem('rabbit_rooms') || '[]');
+            const today = new Date().toDateString();
+
+            const todayCleanings = records.filter(r => 
+                r.completed && 
+                new Date(r.completedAt).toDateString() === today
+            ).length;
+
+            const todaySpotChecks = spotChecks.filter(sc => 
+                new Date(sc.completedAt).toDateString() === today
+            ).length;
+
+            const activeStaff = users.filter(u => u.role === 'staff' && u.active).length;
+
+            document.getElementById('total-rooms').textContent = rooms.length;
+            document.getElementById('active-staff').textContent = activeStaff;
+            document.getElementById('todays-cleanings').textContent = todayCleanings;
+            document.getElementById('todays-spotchecks').textContent = todaySpotChecks;
+        }
+
+        function loadDepartments() {
+            const container = document.getElementById('department-grid');
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            DEPARTMENTS.forEach(dept => {
+                const card = document.createElement('div');
+                card.className = 'department-card';
+                card.innerHTML = `
+                    <h4>${dept.name[currentLanguage]}</h4>
+                    <p>${dept.implemented ? '✅ Active' : TRANSLATIONS[currentLanguage].coming_soon}</p>
+                `;
+                
+                if (!dept.implemented) {
+                    card.onclick = () => {
+                        showError(`${dept.name[currentLanguage]} module coming soon!`);
+                    };
+                }
+
+                container.appendChild(card);
+            });
+        }
+
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('rabbit_language', lang);
+            
+            // Update language button states
+            document.getElementById('lang-en').style.opacity = lang === 'en' ? '1' : '0.6';
+            document.getElementById('lang-id').style.opacity = lang === 'id' ? '1' : '0.6';
+            
+            updateTranslations();
+            
+            // Reload current screen content
+            if (currentUser) {
+                switch(currentUser.role) {
+                    case 'staff':
+                        loadStaffRoomsList();
+                        break;
+                    case 'supervisor':
+                        loadCleanedRoomsToday();
+                        break;
+                    case 'manager':
+                        loadManagerAnalytics();
+                        break;
+                    case 'owner':
+                        loadDepartments();
+                        break;
+                }
+            }
+
+            // Reload room tasks if in cleaning mode
+            if (currentRoom) {
+                renderTasksList();
+            }
+        }
+
+        function updateTranslations() {
+            const elements = document.querySelectorAll('[id]');
+            elements.forEach(element => {
+                const key = element.id.replace(/-/g, '_');
+                if (TRANSLATIONS[currentLanguage] && TRANSLATIONS[currentLanguage][key]) {
+                    if (element.tagName === 'INPUT' && element.type !== 'button') {
+                        element.placeholder = TRANSLATIONS[currentLanguage][key];
+                    } else {
+                        element.textContent = TRANSLATIONS[currentLanguage][key];
+                    }
+                }
+            });
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+            }
+            
+            clearError();
+        }
+
+        function goBack() {
+            if (currentUser) {
+                switch(currentUser.role) {
+                    case 'staff':
+                        showScreen('staff-dashboard');
+                        loadStaffDashboard();
+                        break;
+                    case 'supervisor':
+                        showScreen('supervisor-dashboard');
+                        break;
+                    case 'manager':
+                        showScreen('manager-dashboard');
+                        break;
+                    case 'owner':
+                        showScreen('owner-dashboard');
+                        break;
+                }
+            }
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('error-message');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+            
+            setTimeout(clearError, 5000);
+        }
+
+        function showSuccess(message) {
+            const errorEl = document.getElementById('error-message');
+            errorEl.textContent = message;
+            errorEl.style.background = 'linear-gradient(45deg, #56ab2f, #a8e6cf)';
+            errorEl.classList.add('show');
+            
+            setTimeout(() => {
+                clearError();
+                errorEl.style.background = 'linear-gradient(45deg, #ff416c, #ff4b2b)';
+            }, 3000);
+        }
+
+        function clearError() {
+            const errorEl = document.getElementById('error-message');
+            errorEl.classList.remove('show');
+        }
+
+        function showLoading(buttonId, show) {
+            const button = document.getElementById(buttonId);
+            const text = button.querySelector('span:first-child');
+            const loading = button.querySelector('.loading');
+            
+            if (show) {
+                text.style.display = 'none';
+                loading.style.display = 'inline-block';
+                button.disabled = true;
+            } else {
+                text.style.display = 'inline';
+                loading.style.display = 'none';
+                button.disabled = false;
+            }
+        }
+
+        // ==============================================
+        // EVENT LISTENERS & INITIALIZATION
+        // ==============================================
+
+        // Enter key support for login
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const activeScreen = document.querySelector('.screen.active');
+                if (activeScreen && activeScreen.id === 'login-screen') {
+                    login();
+                }
+            }
         });
+
+        // Initialize system on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSystem();
+        });
+
+        // Error recovery - clear localStorage if corrupted
+        window.addEventListener('error', function(e) {
+            console.error('System error:', e);
+            if (e.message.includes('localStorage') || e.message.includes('JSON')) {
+                if (confirm('System data appears corrupted. Reset to defaults?')) {
+                    localStorage.clear();
+                    location.reload();
+                }
+            }
+        });
+
     </script>
 </body>
 </html>
