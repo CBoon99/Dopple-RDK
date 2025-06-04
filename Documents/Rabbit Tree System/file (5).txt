@@ -1,0 +1,279 @@
+// rooms.json - Complete room configuration
+{
+  "rooms": [
+    {
+      "id": "room_monk",
+      "name": { "en": "Monk", "id": "Monk" },
+      "type": "Monk",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_twin_cave",
+      "name": { "en": "Twin Cave", "id": "Twin Cave" },
+      "type": "Twin Cave",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_family_cave",
+      "name": { "en": "Family Cave", "id": "Family Cave" },
+      "type": "Family Cave",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_flying_boat",
+      "name": { "en": "Flying Boat", "id": "Flying Boat" },
+      "type": "Flying Boat",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_baby",
+      "name": { "en": "Baby", "id": "Baby" },
+      "type": "Baby",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_tree_house",
+      "name": { "en": "Tree House", "id": "Tree House" },
+      "type": "Tree House",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_bird_nest",
+      "name": { "en": "Bird Nest", "id": "Bird Nest" },
+      "type": "Bird Nest",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_bola_bola",
+      "name": { "en": "Bola - Bola", "id": "Bola - Bola" },
+      "type": "Bola - Bola",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_pillow",
+      "name": { "en": "Pillow", "id": "Pillow" },
+      "type": "Pillow",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_passion",
+      "name": { "en": "Passion", "id": "Passion" },
+      "type": "Passion",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_bamboo_1",
+      "name": { "en": "Bamboo 1", "id": "Bamboo 1" },
+      "type": "Bamboo 1",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_bamboo_2",
+      "name": { "en": "Bamboo 2", "id": "Bamboo 2" },
+      "type": "Bamboo 2",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_rabbit_dream",
+      "name": { "en": "Rabbit Dream", "id": "Rabbit Dream" },
+      "type": "Rabbit Dream",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_rabbit_color",
+      "name": { "en": "Rabbit Color", "id": "Rabbit Color" },
+      "type": "Rabbit Color",
+      "active": true,
+      "maxDaily": 1
+    },
+    {
+      "id": "room_toilet",
+      "name": { "en": "Toilet", "id": "Toilet" },
+      "type": "Toilet",
+      "active": true,
+      "maxDaily": 1
+    }
+  ]
+}
+
+// Sample of the 453 tasks extracted (showing structure for all room types)
+// In production, replace the SAMPLE_TASKS array in the HTML with this complete dataset
+
+{
+  "tasks": [
+    // MONK ROOM TASKS (30 tasks)
+    {
+      "id": "task_1",
+      "roomType": "Monk",
+      "roomId": "room_monk",
+      "section": { "en": "Initial Room Entry", "id": "Masuk Ruangan Awal" },
+      "task": { "en": "Scan the entire room upon entry", "id": "Periksa seluruh ruangan saat masuk" },
+      "required": true,
+      "order": 1
+    },
+    {
+      "id": "task_2", 
+      "roomType": "Monk",
+      "roomId": "room_monk",
+      "section": { "en": "Initial Room Entry", "id": "Masuk Ruangan Awal" },
+      "task": { "en": "Check for unusual or suspicious items", "id": "Periksa barang-barang yang tidak biasa atau mencurigakan" },
+      "required": true,
+      "order": 2
+    },
+    {
+      "id": "task_3",
+      "roomType": "Monk", 
+      "roomId": "room_monk",
+      "section": { "en": "Initial Room Entry", "id": "Masuk Ruangan Awal" },
+      "task": { "en": "Check for guest belongings left behind", "id": "Periksa barang-barang tamu yang tertinggal" },
+      "required": true,
+      "order": 3
+    },
+    {
+      "id": "task_4",
+      "roomType": "Monk",
+      "roomId": "room_monk", 
+      "section": { "en": "Initial Room Entry", "id": "Masuk Ruangan Awal" },
+      "task": { "en": "Turn on all the lights", "id": "Nyalakan semua lampu" },
+      "required": true,
+      "order": 4
+    },
+    {
+      "id": "task_5",
+      "roomType": "Monk",
+      "roomId": "room_monk",
+      "section": { "en": "Initial Room Entry", "id": "Masuk Ruangan Awal" },
+      "task": { "en": "Check for damaged or misplaced facilities", "id": "Periksa fasilitas yang rusak atau tidak pada tempatnya" },
+      "required": true,
+      "order": 5
+    },
+    {
+      "id": "task_6",
+      "roomType": "Monk",
+      "roomId": "room_monk",
+      "section": { "en": "Initial Room Entry", "id": "Masuk Ruangan Awal" },
+      "task": { "en": "Report any damage to reception", "id": "Laporkan kerusakan ke resepsionis" },
+      "required": true,
+      "order": 6
+    },
+    {
+      "id": "task_7",
+      "roomType": "Monk",
+      "roomId": "room_monk",
+      "section": { "en": "Air Conditioning", "id": "AC" },
+      "task": { "en": "Ensure ventilation is turned off", "id": "Pastikan ventilasi dimatikan" },
+      "required": true,
+      "order": 7
+    },
+    {
+      "id": "task_8",
+      "roomType": "Monk",
+      "roomId": "room_monk",
+      "section": { "en": "Ceiling & High Surfaces", "id": "Langit-langit & Permukaan Tinggi" },
+      "task": { "en": "Dust and clean the ceiling", "id": "Bersihkan debu dari langit-langit" },
+      "required": true,
+      "order": 8
+    },
+    {
+      "id": "task_9",
+      "roomType": "Monk",
+      "roomId": "room_monk",
+      "section": { "en": "Ceiling & High Surfaces", "id": "Langit-langit & Permukaan Tinggi" },
+      "task": { "en": "Remove cobwebs from corners, walls, and ornaments", "id": "Singkirkan sarang laba-laba dari sudut, dinding, dan ornamen" },
+      "required": true,
+      "order": 9
+    },
+    {
+      "id": "task_10",
+      "roomType": "Monk",
+      "roomId": "room_monk",
+      "section": { "en": "Beds & Bedding", "id": "Tempat Tidur & Seprai" },
+      "task": { "en": "Remove used bed sheet, pillowcases, and blanket", "id": "Lepas seprai bekas, sarung bantal, dan selimut" },
+      "required": true,
+      "order": 10
+    },
+
+    // TWIN CAVE ROOM TASKS (29 tasks)
+    {
+      "id": "task_31",
+      "roomType": "Twin Cave",
+      "roomId": "room_twin_cave",
+      "section": { "en": "Initial Room Entry", "id": "Masuk Ruangan Awal" },
+      "task": { "en": "Scan the entire room upon entry", "id": "Periksa seluruh ruangan saat masuk" },
+      "required": true,
+      "order": 1
+    },
+    {
+      "id": "task_32",
+      "roomType": "Twin Cave",
+      "roomId": "room_twin_cave", 
+      "section": { "en": "Initial Room Entry", "id": "Masuk Ruangan Awal" },
+      "task": { "en": "Check for unusual or suspicious items", "id": "Periksa barang-barang yang tidak biasa atau mencurigakan" },
+      "required": true,
+      "order": 2
+    },
+
+    // TOILET TASKS (Special shared facility)
+    {
+      "id": "task_421",
+      "roomType": "Toilet",
+      "roomId": "room_toilet",
+      "section": { "en": "Toilet Cleaning", "id": "Pembersihan Toilet" },
+      "task": { "en": "Clean and disinfect toilet bowl", "id": "Bersihkan dan desinfeksi mangkuk toilet" },
+      "required": true,
+      "order": 1
+    },
+    {
+      "id": "task_422",
+      "roomType": "Toilet",
+      "roomId": "room_toilet",
+      "section": { "en": "Toilet Cleaning", "id": "Pembersihan Toilet" },
+      "task": { "en": "Clean sink and mirror", "id": "Bersihkan wastafel dan cermin" },
+      "required": true,
+      "order": 2
+    },
+    {
+      "id": "task_423",
+      "roomType": "Toilet",
+      "roomId": "room_toilet", 
+      "section": { "en": "Toilet Cleaning", "id": "Pembersihan Toilet" },
+      "task": { "en": "Mop floor with disinfectant", "id": "Pel lantai dengan disinfektan" },
+      "required": true,
+      "order": 3
+    },
+    {
+      "id": "task_424",
+      "roomType": "Toilet",
+      "roomId": "room_toilet",
+      "section": { "en": "Toilet Cleaning", "id": "Pembersihan Toilet" },
+      "task": { "en": "Refill toilet paper and soap", "id": "Isi ulang tissue toilet dan sabun" },
+      "required": true,
+      "order": 4
+    },
+    {
+      "id": "task_425",
+      "roomType": "Toilet",
+      "roomId": "room_toilet",
+      "section": { "en": "Toilet Cleaning", "id": "Pembersihan Toilet" },
+      "task": { "en": "Empty trash bin", "id": "Kosongkan tempat sampah" },
+      "required": true,
+      "order": 5
+    }
+
+    // NOTE: In production, include ALL 453 tasks for all 15 room types
+    // This is just a sample showing the structure for integration
+  ]
+}
